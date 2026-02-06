@@ -23,7 +23,7 @@ export default function CTA() {
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <Link
-                                href="/signup"
+                                href="/login"
                                 className="px-8 py-4 bg-background text-primary rounded-full font-bold text-lg hover:bg-secondary transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
                             >
                                 Start Free Trial

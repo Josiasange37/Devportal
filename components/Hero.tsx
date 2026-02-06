@@ -15,7 +15,7 @@ export default function Hero() {
                     </h1>
 
                     <div className="mt-20 flex items-center gap-6">
-                        <Link href="/signup" className="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/30 hover:scale-110 transition-transform group">
+                        <Link href="/login" className="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/30 hover:scale-110 transition-transform group">
                             <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                         </Link>
                         <p className="text-sm text-muted-foreground max-w-[150px] font-medium leading-snug">
