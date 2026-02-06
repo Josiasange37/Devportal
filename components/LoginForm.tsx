@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-export default function LoginForm() {
+export default function LoginForm({ onStepChange }: { onStepChange: (step: number, name: string) => void }) {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         name: '',
@@ -13,8 +13,16 @@ export default function LoginForm() {
     });
     const [isLoading, setIsLoading] = useState(false);
 
-    const nextStep = () => setStep(prev => prev + 1);
-    const prevStep = () => setStep(prev => prev - 1);
+    const nextStep = () => {
+        const newStep = step + 1;
+        setStep(newStep);
+        onStepChange(newStep, formData.name);
+    };
+    const prevStep = () => {
+        const newStep = step - 1;
+        setStep(newStep);
+        onStepChange(newStep, formData.name);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,55 +30,21 @@ export default function LoginForm() {
             nextStep();
         } else {
             setIsLoading(true);
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 1500));
-            console.log('Form Submitted:', formData);
             setIsLoading(false);
             alert('Welcome to Dev Portal!');
         }
     };
 
     const updateFormData = (field: string, value: string) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
-    };
-
-    const getMascotMessage = () => {
-        switch (step) {
-            case 1: return "Hi! I'm Gravity. Let's start by getting to know you—what's your name?";
-            case 2: return `Awesome to meet you, ${formData.name}! Now, let's set up those login keys.`;
-            case 3: return "Almost there! One last thing: what's the name of your empire?";
-            default: return "Welcome to the portal!";
-        }
+        const newData = { ...formData, [field]: value };
+        setFormData(newData);
+        if (field === 'name') onStepChange(step, value);
     };
 
     return (
-        <div className="w-full max-w-md mx-auto relative">
-
-            {/* Mascot & Speech Bubble */}
-            <div className="absolute -top-24 -right-12 md:-right-24 z-20 flex flex-col items-center animate-float">
-                <div className="relative group">
-                    {/* Speech Bubble */}
-                    <div className="absolute bottom-full right-0 mb-4 w-48 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-xl border border-primary/20 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200 leading-relaxed">
-                            {getMascotMessage()}
-                        </p>
-                        {/* Bubble Tail */}
-                        <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white dark:bg-slate-800 border-r border-b border-primary/20 rotate-45"></div>
-                    </div>
-
-                    {/* Mascot Image */}
-                    <div className="w-24 h-24 relative">
-                        <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
-                        <img
-                            src="/mascot.png"
-                            alt="Gravity Mascot"
-                            className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div className="bg-card/50 backdrop-blur-xl border border-border rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden transition-all duration-500">
+        <div className="w-full max-w-md mx-auto relative px-4">
+            <div className="bg-card/50 backdrop-blur-xl border border-border rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden transition-all duration-500">
 
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-border/50">
