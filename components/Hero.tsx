@@ -9,9 +9,9 @@ export default function Hero() {
 
                 {/* LEFT COLUMN - Typography & Action */}
                 <div className="col-span-12 lg:col-span-4 flex flex-col justify-center relative z-20">
-                    <h1 className="text-7xl md:text-8xl font-sans font-bold text-foreground leading-[0.9] tracking-tighter mb-4">
-                        INVEST IN <br />
-                        YOUR <span className="font-script text-primary font-normal block mt-2 text-9xl">Growth</span>
+                    <h1 className="text-5xl md:text-8xl font-sans font-bold text-foreground leading-[0.9] tracking-tighter mb-4 uppercase">
+                        Invest in <br />
+                        your <span className="font-script text-primary font-normal block mt-2 text-7xl md:text-9xl capitalize">Growth</span>
                     </h1>
 
                     <div className="mt-20 flex items-center gap-6">
