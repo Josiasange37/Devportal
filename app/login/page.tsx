@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import LoginForm from '@/components/LoginForm';
 import GravityMascot from '@/components/GravityMascot';
@@ -27,12 +29,12 @@ export default function LoginPage() {
             <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-slow"></div>
 
             {/* Mascot - Positioned in the middle for large screens */}
-            <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[150px] z-20">
+            <div className="hidden lg:block absolute left-[45%] top-1/2 -translate-x-1/2 -translate-y-[80px] z-20">
                 <GravityMascot message={getMascotMessage()} />
             </div>
 
             {/* Mobile Mascot - Positioned above form */}
-            <div className="lg:hidden absolute top-20 left-1/2 -translate-x-1/2 z-20 scale-75">
+            <div className="lg:hidden absolute top-24 left-[40%] -translate-x-1/2 z-20 scale-75">
                 <GravityMascot message={getMascotMessage()} />
             </div>
 
