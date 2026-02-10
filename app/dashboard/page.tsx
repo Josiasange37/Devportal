@@ -8,11 +8,19 @@ import GravityMascot from '@/components/GravityMascot';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
     const { user, loading } = useAuth();
     const router = useRouter();
+    const [showContent, setShowContent] = useState(false);
+
+    useEffect(() => {
+        if (!loading && user) {
+            const timer = setTimeout(() => setShowContent(true), 100);
+            return () => clearTimeout(timer);
+        }
+    }, [user, loading]);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -20,37 +28,36 @@ export default function DashboardPage() {
         }
     }, [user, loading, router]);
 
-    if (loading || !user) {
+    if (loading || !user || !showContent) {
         return (
-            <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden">
+            <div className={`min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden transition-opacity duration-1000 ${loading || !user ? 'opacity-100' : 'opacity-0'}`}>
                 {/* iOS-style radial background glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
 
-                <div className="relative z-10 flex flex-col items-center">
+                <div className="relative z-10 flex flex-col items-center scale-90 animate-in fade-in zoom-in duration-1000">
                     <div className="w-20 h-20 relative mb-8">
-                        <div className="absolute inset-0 rounded-3xl bg-primary/20 animate-pulse"></div>
+                        <div className="absolute inset-0 rounded-3xl bg-primary/20 animate-ping"></div>
                         <Image
                             src="/logo.png"
                             alt="DevPortal Pro"
                             width={80}
                             height={80}
-                            className="relative z-10 w-full h-full object-contain"
+                            className="relative z-10 w-full h-full object-contain drop-shadow-2xl"
                         />
                     </div>
 
-                    {/* Refined iOS Spinner */}
                     <div className="flex gap-1.5 mb-4">
                         {[0, 1, 2].map((i) => (
                             <div
                                 key={i}
                                 className="w-1.5 h-6 bg-primary rounded-full animate-bounce"
-                                style={{ animationDelay: `${i * 0.1}s`, opacity: 0.3 + (i * 0.3) }}
+                                style={{ animationDelay: `${i * 0.15}s`, opacity: 0.3 + (i * 0.3) }}
                             ></div>
                         ))}
                     </div>
 
-                    <p className="text-sm font-bold text-muted-foreground uppercase tracking-[0.2em] animate-pulse">
-                        Securing Session
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] opacity-50">
+                        Synchronizing Workspace
                     </p>
                 </div>
             </div>
@@ -60,17 +67,19 @@ export default function DashboardPage() {
     const displayName = user.displayName || user.email?.split('@')[0] || 'Member';
     return (
         <div className="flex min-h-screen bg-background transition-colors duration-300 overflow-hidden">
-            {/* Sidebar */}
-            <DashboardSidebar />
+            {/* Sidebar with staggered entry */}
+            <div className="animate-in fade-in slide-in-from-left-8 duration-1000 ease-out">
+                <DashboardSidebar />
+            </div>
 
             {/* Main Content Area */}
             <main className="flex-1 relative flex flex-col h-screen overflow-y-auto overflow-x-hidden">
 
                 {/* Top Navbar */}
-                <header className="h-16 border-b border-border bg-card/50 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-20">
+                <header className="h-16 border-b border-border bg-card/50 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-20 animate-in fade-in slide-in-from-top-4 duration-700 delay-300 fill-mode-both">
                     <div className="flex flex-col">
                         <h1 className="text-lg font-bold">Dashboard Overview</h1>
-                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Welcome back, John</p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Welcome back, {displayName}</p>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -92,17 +101,19 @@ export default function DashboardPage() {
                 <div className="p-8 flex-1 space-y-8 max-w-7xl mx-auto w-full">
 
                     {/* Hero Stats */}
-                    <DashboardStats />
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-both">
+                        <DashboardStats />
+                    </div>
 
                     {/* Main Grid: Projects & Activity */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Projects Card */}
-                        <div className="lg:col-span-2">
+                        <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700 fill-mode-both">
                             <ProjectList />
                         </div>
 
                         {/* Recent Activity Card */}
-                        <div className="bg-card rounded-[2.5rem] border border-border p-8 shadow-sm">
+                        <div className="bg-card rounded-[2.5rem] border border-border p-8 shadow-sm animate-in fade-in slide-in-from-right-8 duration-1000 delay-1000 fill-mode-both">
                             <div className="flex items-center gap-3 mb-8">
                                 <Activity className="text-primary" size={20} />
                                 <h3 className="text-xl font-bold">Recent Activity</h3>
@@ -136,7 +147,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Persistent Mascot integration for Dashboard */}
-                <div className="fixed bottom-8 right-8 z-40 scale-75 hover:scale-100 transition-transform origin-bottom-right group">
+                <div className="fixed bottom-8 right-8 z-40 scale-75 hover:scale-100 transition-transform origin-bottom-right group animate-in fade-in zoom-in duration-1000 delay-[1200ms] fill-mode-both">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-[120%] right-0">
                         <GravityMascot message={`Need any help navigating your new space, ${displayName}?`} />
                     </div>
