@@ -106,6 +106,8 @@ export default function LoginForm({
                     errorMessage = "Incorrect password. Please try again.";
                 } else if (err.code === 'auth/invalid-credential' || err.message?.includes('invalid-credential')) {
                     errorMessage = "Invalid credentials. If you don't have an account, please register.";
+                } else if (err.code === 'auth/network-request-failed') {
+                    errorMessage = "Network error. Please check your internet connection or firewall.";
                 }
                 setError(errorMessage);
             } finally {
@@ -129,6 +131,8 @@ export default function LoginForm({
                     errorMessage = "This email is already registered. Try signing in!";
                 } else if (err.code === 'auth/weak-password') {
                     errorMessage = "Password is too weak. Try a stronger one.";
+                } else if (err.code === 'auth/network-request-failed') {
+                    errorMessage = "Network error. Please check your internet connection or firewall.";
                 }
                 setError(errorMessage);
             } finally {
