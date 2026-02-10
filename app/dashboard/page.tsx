@@ -6,8 +6,58 @@ import ProjectList from '@/components/ProjectList';
 import { Bell, HelpCircle, Activity } from 'lucide-react';
 import GravityMascot from '@/components/GravityMascot';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
 
 export default function DashboardPage() {
+    const { user, loading } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!loading && !user) {
+            router.push('/login');
+        }
+    }, [user, loading, router]);
+
+    if (loading || !user) {
+        return (
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden">
+                {/* iOS-style radial background glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+                <div className="relative z-10 flex flex-col items-center">
+                    <div className="w-20 h-20 relative mb-8">
+                        <div className="absolute inset-0 rounded-3xl bg-primary/20 animate-pulse"></div>
+                        <Image
+                            src="/logo.png"
+                            alt="DevPortal Pro"
+                            width={80}
+                            height={80}
+                            className="relative z-10 w-full h-full object-contain"
+                        />
+                    </div>
+
+                    {/* Refined iOS Spinner */}
+                    <div className="flex gap-1.5 mb-4">
+                        {[0, 1, 2].map((i) => (
+                            <div
+                                key={i}
+                                className="w-1.5 h-6 bg-primary rounded-full animate-bounce"
+                                style={{ animationDelay: `${i * 0.1}s`, opacity: 0.3 + (i * 0.3) }}
+                            ></div>
+                        ))}
+                    </div>
+
+                    <p className="text-sm font-bold text-muted-foreground uppercase tracking-[0.2em] animate-pulse">
+                        Securing Session
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    const displayName = user.displayName || user.email?.split('@')[0] || 'Member';
     return (
         <div className="flex min-h-screen bg-background transition-colors duration-300 overflow-hidden">
             {/* Sidebar */}
@@ -88,7 +138,7 @@ export default function DashboardPage() {
                 {/* Persistent Mascot integration for Dashboard */}
                 <div className="fixed bottom-8 right-8 z-40 scale-75 hover:scale-100 transition-transform origin-bottom-right group">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-[120%] right-0">
-                        <GravityMascot message="Need any help navigating your new space, John?" />
+                        <GravityMascot message={`Need any help navigating your new space, ${displayName}?`} />
                     </div>
                     <div className="w-20 h-20 rounded-full bg-card/80 backdrop-blur-xl border border-primary/20 flex items-center justify-center animate-bounce shadow-2xl cursor-pointer hover:border-primary/50 transition-colors relative overflow-hidden">
                         <Image

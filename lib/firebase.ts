@@ -14,6 +14,17 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
+// Validate config
+if (typeof window !== 'undefined') {
+  const missingKeys = Object.entries(firebaseConfig)
+    .filter(([key, value]) => !value && key !== 'measurementId')
+    .map(([key]) => key);
+
+  if (missingKeys.length > 0) {
+    console.error(`Firebase keys missing: ${missingKeys.join(', ')}. Check your .env.local file.`);
+  }
+}
+
 // Initialize Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);

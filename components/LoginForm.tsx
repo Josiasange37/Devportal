@@ -4,9 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { db, auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function LoginForm({
     onStepChange,
@@ -30,46 +27,55 @@ export default function LoginForm({
         businessName: ''
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const { signInWithGoogle } = useAuth();
+    const [isSuccess, setIsSuccess] = useState(false);
+    const { signInWithGoogle, signInWithGithub, loginWithEmail, registerWithEmail } = useAuth();
     const router = useRouter();
 
-    const nextStep = () => {
-        const newStep = step + 1;
-        setStep(newStep);
-        onStepChange(newStep, formData.name);
-    };
-    const prevStep = () => {
-        const newStep = step - 1;
-        setStep(newStep);
-        onStepChange(newStep, formData.name);
-    };
-
     const handleGoogleSignIn = async () => {
+        setIsLoading(true);
+        setError(null);
         try {
             await signInWithGoogle();
-            router.push('/dashboard');
+            setIsSuccess(true);
+            setTimeout(() => router.push('/dashboard'), 1500);
         } catch (err: any) {
-            setError(err.message);
+            console.error("Social login error:", err);
+            setError("Google login failed. If this persists, try to register manually.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGithubSignIn = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            await signInWithGithub();
+            setIsSuccess(true);
+            setTimeout(() => router.push('/dashboard'), 1500);
+        } catch (err: any) {
+            console.error("Social login error:", err);
+            setError("GitHub login failed. If you don't have an account, try to register.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+        if (isSuccess) return;
 
         if (internalIsLogin) {
             setIsLoading(true);
             try {
-                await signInWithEmailAndPassword(auth, formData.email, formData.password);
-                router.push('/dashboard');
+                await loginWithEmail(formData.email, formData.password);
+                setIsSuccess(true);
+                setTimeout(() => router.push('/dashboard'), 1500);
             } catch (err: any) {
-                console.error("Login error:", err);
-                setError(err.message === 'Firebase: Error (auth/user-not-found).'
-                    ? 'No user found with this email.'
-                    : err.message === 'Firebase: Error (auth/wrong-password).'
-                        ? 'Incorrect password.'
-                        : 'Failed to sign in. Please check your credentials.');
+                console.error("Detailed login error:", err);
+                let errorMessage = "Something went wrong. Please try again.";
+                setError(errorMessage);
             } finally {
                 setIsLoading(false);
             }
@@ -81,28 +87,13 @@ export default function LoginForm({
         } else {
             setIsLoading(true);
             try {
-                // Create user with email and password
-                const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-                const user = userCredential.user;
-
-                // Update profile with name
-                await updateProfile(user, {
-                    displayName: formData.name
-                });
-
-                // Store additional user data in Firestore
-                await setDoc(doc(db, 'users', user.uid), {
-                    name: formData.name,
-                    email: formData.email,
-                    businessName: formData.businessName,
-                    createdAt: new Date().toISOString()
-                });
-
-                // Redirect to dashboard
-                router.push('/dashboard');
+                await registerWithEmail(formData.email, formData.password, formData.name, formData.businessName);
+                setIsSuccess(true);
+                setTimeout(() => router.push('/dashboard'), 1500);
             } catch (err: any) {
-                console.error("Registration error:", err);
-                setError(err.message);
+                console.error("Detailed registration error:", err);
+                let errorMessage = "Registration failed. Try again.";
+                setError(errorMessage);
             } finally {
                 setIsLoading(false);
             }
@@ -141,248 +132,278 @@ export default function LoginForm({
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="relative z-10">
+                <form onSubmit={handleSubmit} className={`relative z-10 transition-all duration-700 ${isSuccess ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
                     {/* Error Message */}
                     {error && (
                         <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm font-medium">
                             {error}
                         </div>
                     )}
-
-                    {/* Login Mode */}
-                    {internalIsLogin && (
-                        <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-                            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight">Welcome Back</h2>
-                            <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">Sign in to your dashboard</p>
-
-                            <div className="space-y-5 sm:space-y-6 mb-8 sm:mb-10">
-                                <div className="relative group">
-                                    <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Email</label>
-                                    <input
-                                        type="email"
-                                        required
-                                        value={formData.email}
-                                        onChange={(e) => updateFormData('email', e.target.value)}
-                                        placeholder="name@company.com"
-                                        className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
-                                    />
-                                    <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
-                                </div>
-                                <div className="relative group">
-                                    <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Password</label>
-                                    <input
-                                        type="password"
-                                        required
-                                        value={formData.password}
-                                        onChange={(e) => updateFormData('password', e.target.value)}
-                                        placeholder="••••••••"
-                                        className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
-                                    />
-                                    <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
-                                </div>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group disabled:opacity-50"
-                            >
-                                {isLoading ? (
-                                    <span className="flex items-center gap-3">
-                                        <svg className="animate-spin h-6 w-6 text-current" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Signing In...
-                                    </span>
-                                ) : (
-                                    <>
-                                        Sign In
-                                        <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                        </svg>
-                                    </>
-                                )}
-                            </button>
-                        </div>
-                    )}
-
-                    {/* Step 1: User Name (Register) */}
-                    {!internalIsLogin && step === 1 && (
-                        <div className="animate-in fade-in slide-in-from-right-8 duration-700">
-                            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight text-balance">Welcome!</h2>
-                            <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">What should we call you?</p>
-
-                            <div className="relative group mb-8 sm:mb-10">
-                                <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Full Name</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formData.name}
-                                    onChange={(e) => updateFormData('name', e.target.value)}
-                                    placeholder="Enter your name"
-                                    className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
-                                />
-                                <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group"
-                            >
-                                Continue
-                                <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
-
-                    {/* Step 2: Credentials (Register) */}
-                    {!internalIsLogin && step === 2 && (
-                        <div className="animate-in fade-in slide-in-from-right-8 duration-700">
-                            <button
-                                type="button"
-                                onClick={prevStep}
-                                className="mb-6 py-2 px-1 text-sm font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group/back"
-                            >
-                                <svg className="w-5 h-5 group-hover/back:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                                </svg>
-                                Back
-                            </button>
-                            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight">Secure Account</h2>
-                            <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">Great to meet you, {formData.name}!</p>
-
-                            <div className="space-y-5 sm:space-y-6 mb-8 sm:mb-10">
-                                <div className="relative group">
-                                    <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Work Email</label>
-                                    <input
-                                        type="email"
-                                        required
-                                        value={formData.email}
-                                        onChange={(e) => updateFormData('email', e.target.value)}
-                                        placeholder="name@company.com"
-                                        className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
-                                    />
-                                    <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
-                                </div>
-                                <div className="relative group">
-                                    <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Password</label>
-                                    <input
-                                        type="password"
-                                        required
-                                        value={formData.password}
-                                        onChange={(e) => updateFormData('password', e.target.value)}
-                                        placeholder="••••••••"
-                                        className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
-                                    />
-                                    <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
-                                </div>
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group"
-                            >
-                                Setup Account
-                                <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
-
-                    {/* Step 3: Business/Freelancer Name (Register) */}
-                    {!internalIsLogin && step === 3 && (
-                        <div className="animate-in fade-in slide-in-from-right-8 duration-700">
-                            <button
-                                type="button"
-                                onClick={prevStep}
-                                className="mb-6 py-2 px-1 text-sm font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group/back"
-                            >
-                                <svg className="w-5 h-5 group-hover/back:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                                </svg>
-                                Back
-                            </button>
-                            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight">Final Step</h2>
-                            <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">What's the name of your brand or agency?</p>
-
-                            <div className="relative group mb-8 sm:mb-10">
-                                <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Business Name</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={formData.businessName}
-                                    onChange={(e) => updateFormData('businessName', e.target.value)}
-                                    placeholder="e.g. Acme Design"
-                                    className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
-                                />
-                                <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group disabled:opacity-50 disabled:pointer-events-none"
-                            >
-                                {isLoading ? (
-                                    <span className="flex items-center gap-3">
-                                        <svg className="animate-spin h-6 w-6 text-current" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Creating Account...
-                                    </span>
-                                ) : (
-                                    <>
-                                        Complete Registration
-                                        <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </>
-                                )}
-                            </button>
-                        </div>
-                    )}
+                    {/* ... existing form content ... */}
                 </form>
 
-                {/* Social Login (Only on first screen) */}
-                {(internalIsLogin || step === 1) && (
-                    <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-border/40 animate-in fade-in duration-1000 delay-500">
-                        <p className="text-center text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-widest mb-6 sm:mb-8">Or continue with</p>
-                        <div className="grid grid-cols-2 gap-4 sm:gap-6">
-                            <button className="flex items-center justify-center gap-3 py-3.5 sm:py-4 border border-border/60 rounded-2xl hover:bg-secondary/80 hover:border-primary/20 active:scale-[0.97] transition-all text-foreground font-bold text-sm sm:text-base disabled:opacity-50">
-                                <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.920.42.372.79 1.102.79 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
-                                GitHub
-                            </button>
-                            <button
-                                type="button"
-                                onClick={handleGoogleSignIn}
-                                className="flex items-center justify-center gap-3 py-3.5 sm:py-4 border border-border/60 rounded-2xl hover:bg-secondary/80 hover:border-primary/20 active:scale-[0.97] transition-all text-foreground font-bold text-sm sm:text-base"
-                            >
-                                <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5.04c1.64 0 3.12.56 4.28 1.67l3.2-3.2C17.52 1.6 14.96 0 12 0 7.31 0 3.25 2.69 1.21 6.63l3.74 2.9C5.82 7.07 8.7 5.04 12 5.04z" /><path fill="#FBBC04" d="M24 12.27c0-.88-.08-1.74-.23-2.57h-11.77v4.86h6.63c-.29 1.54-1.15 2.85-2.45 3.73l3.86 3c2.26-2.09 3.56-5.17 3.56-9.02z" /><path fill="#34A853" d="M12 24c3.24 0 5.97-1.07 7.96-2.9l-3.86-3c-1.1.74-2.51 1.17-4.1 1.17-3.15 0-5.83-2.12-6.79-5.01l-3.89 3.01C3.25 21.31 7.31 24 12 24z" /><path fill="#4285F4" d="M5.21 15.26c-.24-.74-.38-1.53-.38-2.35S4.97 11.31 5.21 10.57l-3.89-3.01C.47 9.07 0 10.51 0 12.09c0 1.58.47 3.02 1.32 4.53l3.89-3.01z" /></svg>
-                                Google
-                            </button>
+                {/* Portal Success State */}
+                {isSuccess && (
+                    <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 text-center animate-in fade-in zoom-in duration-1000">
+                        {/* iOS-style Portal Wave */}
+                        <div className="absolute inset-0 overflow-hidden rounded-[3rem]">
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-primary/20 rounded-full animate-ping duration-[2000ms]"></div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/10 rounded-full animate-ping duration-[3000ms]"></div>
+                        </div>
+
+                        <div className="relative z-10 space-y-6">
+                            <div className="w-24 h-24 bg-primary text-primary-foreground rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-primary/40 animate-bounce">
+                                <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h2 className="text-3xl font-bold tracking-tight">Access Granted</h2>
+                                <p className="text-muted-foreground font-medium uppercase tracking-[0.2em] text-xs">Synchronizing Portal...</p>
+                            </div>
                         </div>
                     </div>
                 )}
 
-                {/* Bottom Footer */}
-                <div className="mt-8 text-center">
-                    <p className="text-sm text-muted-foreground">
-                        {internalIsLogin ? "Don't have an account?" : "Already have an account?"}{' '}
+                {/* Login Mode */}
+                {internalIsLogin && (
+                    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight">Welcome Back</h2>
+                        <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">Sign in to your dashboard</p>
+
+                        <div className="space-y-5 sm:space-y-6 mb-8 sm:mb-10">
+                            <div className="relative group">
+                                <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Email</label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={formData.email}
+                                    onChange={(e) => updateFormData('email', e.target.value)}
+                                    placeholder="name@company.com"
+                                    className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
+                                />
+                                <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
+                            </div>
+                            <div className="relative group">
+                                <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={formData.password}
+                                    onChange={(e) => updateFormData('password', e.target.value)}
+                                    placeholder="••••••••"
+                                    className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
+                                />
+                                <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group disabled:opacity-50"
+                        >
+                            {isLoading ? (
+                                <span className="flex items-center gap-3">
+                                    <svg className="animate-spin h-6 w-6 text-current" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Signing In...
+                                </span>
+                            ) : (
+                                <>
+                                    Sign In
+                                    <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
+
+                {/* Step 1: User Name (Register) */}
+                {!internalIsLogin && step === 1 && (
+                    <div className="animate-in fade-in slide-in-from-right-8 duration-700">
+                        <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight text-balance">Welcome!</h2>
+                        <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">What should we call you?</p>
+
+                        <div className="relative group mb-8 sm:mb-10">
+                            <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Full Name</label>
+                            <input
+                                type="text"
+                                required
+                                value={formData.name}
+                                onChange={(e) => updateFormData('name', e.target.value)}
+                                placeholder="Enter your name"
+                                className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
+                            />
+                            <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group"
+                        >
+                            Continue
+                            <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </div>
+                )}
+
+                {/* Step 2: Credentials (Register) */}
+                {!internalIsLogin && step === 2 && (
+                    <div className="animate-in fade-in slide-in-from-right-8 duration-700">
                         <button
                             type="button"
-                            onClick={toggleMode}
-                            className="text-primary font-bold hover:underline"
+                            onClick={prevStep}
+                            className="mb-6 py-2 px-1 text-sm font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group/back"
                         >
-                            {internalIsLogin ? 'Register' : 'Sign In'}
+                            <svg className="w-5 h-5 group-hover/back:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back
                         </button>
-                    </p>
+                        <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight">Secure Account</h2>
+                        <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">Great to meet you, {formData.name}!</p>
+
+                        <div className="space-y-5 sm:space-y-6 mb-8 sm:mb-10">
+                            <div className="relative group">
+                                <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Work Email</label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={formData.email}
+                                    onChange={(e) => updateFormData('email', e.target.value)}
+                                    placeholder="name@company.com"
+                                    className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
+                                />
+                                <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
+                            </div>
+                            <div className="relative group">
+                                <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={formData.password}
+                                    onChange={(e) => updateFormData('password', e.target.value)}
+                                    placeholder="••••••••"
+                                    className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
+                                />
+                                <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group"
+                        >
+                            Setup Account
+                            <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                    </div>
+                )}
+
+                {/* Step 3: Business/Freelancer Name (Register) */}
+                {!internalIsLogin && step === 3 && (
+                    <div className="animate-in fade-in slide-in-from-right-8 duration-700">
+                        <button
+                            type="button"
+                            onClick={prevStep}
+                            className="mb-6 py-2 px-1 text-sm font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group/back"
+                        >
+                            <svg className="w-5 h-5 group-hover/back:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back
+                        </button>
+                        <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2 font-sans tracking-tight">Final Step</h2>
+                        <p className="text-muted-foreground mb-8 sm:mb-10 font-medium">What's the name of your brand or agency?</p>
+
+                        <div className="relative group mb-8 sm:mb-10">
+                            <label className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 py-0.5 rounded-full border border-border/50 z-20">Business Name</label>
+                            <input
+                                type="text"
+                                required
+                                value={formData.businessName}
+                                onChange={(e) => updateFormData('businessName', e.target.value)}
+                                placeholder="e.g. Acme Design"
+                                className="w-full bg-background/50 border border-border rounded-2xl p-4 sm:p-5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all font-medium text-foreground placeholder:text-muted-foreground/50"
+                            />
+                            <div className="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-focus-within:opacity-100 transition-opacity pointer-events-none" />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full py-4 sm:py-5 bg-primary text-primary-foreground rounded-2xl font-bold text-lg sm:text-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                            {isLoading ? (
+                                <span className="flex items-center gap-3">
+                                    <svg className="animate-spin h-6 w-6 text-current" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Creating Account...
+                                </span>
+                            ) : (
+                                <>
+                                    Complete Registration
+                                    <svg className="w-6 h-6 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
+            </form>
+
+            {/* Social Login (Only on first screen) */}
+            {(internalIsLogin || step === 1) && (
+                <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-border/40 animate-in fade-in duration-1000 delay-500">
+                    <p className="text-center text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-widest mb-6 sm:mb-8">Or continue with</p>
+                    <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                        <button
+                            type="button"
+                            onClick={handleGithubSignIn}
+                            className="flex items-center justify-center gap-3 py-3.5 sm:py-4 border border-border/60 rounded-2xl hover:bg-secondary/80 hover:border-primary/20 active:scale-[0.97] transition-all text-foreground font-bold text-sm sm:text-base disabled:opacity-50"
+                        >
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.920.42.372.79 1.102.79 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+                            GitHub
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleGoogleSignIn}
+                            className="flex items-center justify-center gap-3 py-3.5 sm:py-4 border border-border/60 rounded-2xl hover:bg-secondary/80 hover:border-primary/20 active:scale-[0.97] transition-all text-foreground font-bold text-sm sm:text-base"
+                        >
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5.04c1.64 0 3.12.56 4.28 1.67l3.2-3.2C17.52 1.6 14.96 0 12 0 7.31 0 3.25 2.69 1.21 6.63l3.74 2.9C5.82 7.07 8.7 5.04 12 5.04z" /><path fill="#FBBC04" d="M24 12.27c0-.88-.08-1.74-.23-2.57h-11.77v4.86h6.63c-.29 1.54-1.15 2.85-2.45 3.73l3.86 3c2.26-2.09 3.56-5.17 3.56-9.02z" /><path fill="#34A853" d="M12 24c3.24 0 5.97-1.07 7.96-2.9l-3.86-3c-1.1.74-2.51 1.17-4.1 1.17-3.15 0-5.83-2.12-6.79-5.01l-3.89 3.01C3.25 21.31 7.31 24 12 24z" /><path fill="#4285F4" d="M5.21 15.26c-.24-.74-.38-1.53-.38-2.35S4.97 11.31 5.21 10.57l-3.89-3.01C.47 9.07 0 10.51 0 12.09c0 1.58.47 3.02 1.32 4.53l3.89-3.01z" /></svg>
+                            Google
+                        </button>
+                    </div>
                 </div>
+            )}
+
+            {/* Bottom Footer */}
+            <div className="mt-8 text-center">
+                <p className="text-sm text-muted-foreground">
+                    {internalIsLogin ? "Don't have an account?" : "Already have an account?"}{' '}
+                    <button
+                        type="button"
+                        onClick={toggleMode}
+                        className="text-primary font-bold hover:underline"
+                    >
+                        {internalIsLogin ? 'Register' : 'Sign In'}
+                    </button>
+                </p>
             </div>
         </div>
+        </div >
     );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Great_Vibes, Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-script" });
@@ -36,9 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} ${greatVibes.variable} ${manrope.variable}`}>
-        <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem>
-          {children}
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem>
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
