@@ -5,7 +5,7 @@ export default function Benefits() {
         <section id="benefits" className="py-20 sm:py-24 bg-background transition-colors duration-300 relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-                    <h2 className="text-xs sm:text-sm font-bold text-primary tracking-widest uppercase mb-3">Why FreelanceOS?</h2>
+                    <h2 className="text-xs sm:text-sm font-bold text-primary tracking-widest uppercase mb-3 text-balance">Why DevPortal Pro?</h2>
                     <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6 font-sans text-balance">
                         Everything You Need to <br className="sm:hidden" />
                         <span className="text-primary">Scale Your Business</span>

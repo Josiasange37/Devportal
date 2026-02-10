@@ -125,6 +125,9 @@ export default function Header() {
 
                     <div className="mt-12 pt-12 border-t border-border/40 text-center">
                         <p className="text-muted-foreground text-sm font-medium">© 2026 DevPortal Pro</p>
+                        <p className="text-muted-foreground text-xs mt-2">
+                            By <a href="https://xyber-clan.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-primary">Xyber Clan</a>
+                        </p>
                     </div>
                 </div>
             </div>

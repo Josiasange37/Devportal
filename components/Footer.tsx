@@ -57,13 +57,15 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-muted-foreground text-[10px] sm:text-xs font-medium text-center md:text-left">© 2026 FreelanceOS Inc. All rights reserved.</p>
+                    <p className="text-muted-foreground text-[10px] sm:text-xs font-medium text-center md:text-left">© 2026 DevPortal Pro. All rights reserved.</p>
                     <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                         <span className="flex items-center gap-2 text-muted-foreground text-[10px] sm:text-xs font-medium">
                             <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500 animate-pulse"></span>
                             System Status: Operational
                         </span>
-                        <p className="text-muted-foreground text-[10px] sm:text-xs font-medium">Made with ❤️ for Freelancers</p>
+                        <p className="text-muted-foreground text-[10px] sm:text-xs font-medium">
+                            A premium solution by <a href="https://xyber-clan.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline transition-all">Xyber Clan</a>
+                        </p>
                     </div>
                 </div>
             </div>
