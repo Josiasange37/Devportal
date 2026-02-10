@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import LoginForm from '@/components/LoginForm';
-import GravityMascot from '@/components/GravityMascot';
+import { AnimateOnScroll } from '@/hooks/useScrollAnimation';
 
 function LoginContent() {
     const searchParams = useSearchParams();
@@ -24,68 +24,93 @@ function LoginContent() {
     const handleStepChange = (newStep: number, newName: string) => {
         setStep(newStep);
         if (newName) setName(newName);
-        // Reset login state if we are moving through steps (registration)
         if (newStep > 1) setIsLogin(false);
     };
 
-    const getMascotMessage = () => {
-        if (isLogin) return "Welcome back! Let's get you signed in.";
-        switch (step) {
-            case 1: return "Hi! I'm Gravity. What should we call you?";
-            case 2: return `Nice to meet you, ${name}! Let's secure your account now.`;
-            case 3: return "Final step: tell me the name of your awesome brand!";
-            default: return "Welcome to Dev Portal!";
-        }
-    };
-
     return (
-        <main className="min-h-screen bg-background relative flex items-center justify-center p-6 overflow-hidden transition-colors duration-300">
-            {/* Background Blobs */}
-            <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse-slow"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <main className="min-h-screen grid lg:grid-cols-2 bg-background overflow-hidden relative">
 
-            {/* Mascot - Positioned in the middle for large screens */}
-            <div className="hidden lg:block absolute left-[45%] top-1/2 -translate-x-1/2 -translate-y-[80px] z-20">
-                <GravityMascot message={getMascotMessage()} />
-            </div>
-
-            {/* Mobile Mascot - Positioned above form */}
-            <div className="lg:hidden absolute top-24 left-[40%] -translate-x-1/2 z-20 scale-75">
-                <GravityMascot message={getMascotMessage()} />
-            </div>
-
-            <div className="relative z-10 w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-                {/* Left Side: Illustration / Text */}
-                <div className="hidden lg:flex flex-col">
-                    <h1 className="text-7xl font-sans font-bold text-foreground leading-tight tracking-tighter mb-8 uppercase">
-                        Start your <br />
-                        <span className="text-primary">Journey</span> <br />
-                        with us.
-                    </h1>
-                    <div className="flex items-center gap-6 mt-4">
-                        <div className="flex -space-x-3">
-                            <div className="w-10 h-10 rounded-full border-2 border-background bg-gray-300 overflow-hidden relative">
-                                <Image src="https://i.pravatar.cc/100?img=1" alt="User" width={40} height={40} />
-                            </div>
-                            <div className="w-10 h-10 rounded-full border-2 border-background bg-gray-400 overflow-hidden relative">
-                                <Image src="https://i.pravatar.cc/100?img=2" alt="User" width={40} height={40} />
-                            </div>
-                        </div>
-                        <p className="text-sm text-muted-foreground max-w-[200px] font-medium leading-snug">
-                            Join 10K+ freelancers managing their business with complete confidence.
-                        </p>
-                    </div>
-                </div>
-
-                {/* Right Side: The Form */}
-                <div className="flex justify-center lg:justify-end mt-16 lg:mt-0">
-                    <LoginForm
-                        onStepChange={handleStepChange}
-                        onModeToggle={(login) => setIsLogin(login)}
-                        isLogin={isLogin}
+            {/* LEFT SIDE: Editorial Visual (Desktop) */}
+            <div className="hidden lg:flex flex-col justify-between p-12 lg:p-16 xl:p-20 bg-[#0A0A0A] relative overflow-hidden">
+                {/* Background Texture */}
+                {/* Background Image */}
+                <div className="absolute inset-0 z-0">
+                    <Image
+                        src="/login-bg.png"
+                        alt="Background"
+                        fill
+                        className="object-cover opacity-60 mix-blend-overlay"
+                        priority
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                </div>
+
+                {/* Gradient Accents */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
+
+                <div className="relative z-10">
+                    <AnimateOnScroll animation="fade-down" duration="800ms">
+                        <div className="flex items-center gap-2 mb-12">
+                            <div className="w-8 h-8 bg-white text-black rounded-lg flex items-center justify-center font-bold font-sans">D</div>
+                            <span className="text-white font-bold tracking-tight">DevPortal Pro</span>
+                        </div>
+                    </AnimateOnScroll>
+
+                    <AnimateOnScroll animation="fade-right" duration="1000ms" delay="200ms">
+                        <h1 className="text-5xl xl:text-7xl font-bold text-white leading-tight tracking-tight mb-8">
+                            Start your <br />
+                            <span className="font-script text-primary capitalize">Journey</span> <br />
+                            with us.
+                        </h1>
+                        <p className="text-white/60 text-lg max-w-md leading-relaxed">
+                            Join 10,000+ top-tier freelancers managing their business with less stress and more profit.
+                        </p>
+                    </AnimateOnScroll>
+                </div>
+
+                <div className="relative z-10 mt-auto">
+                    <AnimateOnScroll animation="fade-up" duration="1000ms" delay="400ms">
+                        <div className="flex items-center gap-4 mb-4">
+                            {['/avatars/user1.png', '/avatars/user2.png', '/avatars/user3.png', '/avatars/user4.png'].map((src, i) => (
+                                <div key={i} className="w-10 h-10 rounded-full border-2 border-[#0A0A0A] bg-white/10 overflow-hidden relative">
+                                    <Image src={src} alt={`User ${i + 1}`} fill className="object-cover" />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-2 text-white/40 text-sm font-medium uppercase tracking-widest">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            Trusted by industry leaders
+                        </div>
+                    </AnimateOnScroll>
                 </div>
             </div>
+
+            {/* RIGHT SIDE: Form */}
+            <div className="flex items-center justify-center p-6 sm:p-12 lg:p-16 relative">
+                {/* Mobile Background Blob (only visible on small screens) */}
+                <div className="lg:hidden absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-primary/10 rounded-full blur-[80px]" />
+
+                <div className="w-full max-w-md relative z-10">
+                    <AnimateOnScroll animation="fade-in" duration="800ms" delay="100ms">
+                        <LoginForm
+                            onStepChange={handleStepChange}
+                            onModeToggle={(login) => setIsLogin(login)}
+                            isLogin={isLogin}
+                        />
+                    </AnimateOnScroll>
+
+                    {/* Footer links */}
+                    <AnimateOnScroll animation="fade-up" duration="800ms" delay="300ms">
+                        <div className="mt-8 text-center flex items-center justify-center gap-6 text-xs text-muted-foreground">
+                            <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
+                            <span className="w-1 h-1 rounded-full bg-border" />
+                            <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
+                        </div>
+                    </AnimateOnScroll>
+                </div>
+            </div>
+
         </main>
     );
 }
