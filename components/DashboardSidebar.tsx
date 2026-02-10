@@ -14,6 +14,7 @@ import {
     Search,
     Bell
 } from 'lucide-react';
+import Logo from './Logo';
 
 export default function DashboardSidebar() {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -34,14 +35,9 @@ export default function DashboardSidebar() {
         <aside className={`h-screen bg-card border-r border-border flex flex-col transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'} relative z-30`}>
             {/* Logo Section */}
             <div className="p-6 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-                    <span className="text-white font-bold text-xl">D</span>
-                </div>
-                {!isCollapsed && (
-                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 tracking-tight">
-                        DevPortal
-                    </span>
-                )}
+                <Link href="/" className="flex items-center gap-3">
+                    <Logo showText={!isCollapsed} />
+                </Link>
             </div>
 
             {/* Collapse Toggle */}
@@ -73,8 +69,8 @@ export default function DashboardSidebar() {
                         key={index}
                         href={item.href}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group ${item.active
-                                ? 'bg-primary/10 text-primary'
-                                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                             }`}
                     >
                         <span className={`${item.active ? 'text-primary' : 'group-hover:text-primary'} transition-colors`}>

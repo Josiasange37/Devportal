@@ -1,5 +1,7 @@
 'use client';
 
+import BrandLogo from './BrandLogo';
+
 export default function StackCarousel() {
     const stack = [
         {
@@ -30,13 +32,9 @@ export default function StackCarousel() {
             )
         },
         {
-            name: 'Vercel',
-            color: '#000000',
-            icon: (
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white">
-                    <path d="M24 22.525H0l12-21.05 12 21.05z" />
-                </svg>
-            )
+            name: 'DevPortal Pro',
+            color: '#4F46E5',
+            icon: <BrandLogo className="w-16 h-16" />
         },
         {
             name: 'Figma',
@@ -78,41 +76,44 @@ export default function StackCarousel() {
     ];
 
     return (
-        <section className="py-16 bg-background border-y border-border transition-colors duration-300 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-6 mb-12 text-center">
-                <p className="text-xs font-bold text-muted-foreground uppercase tracking-[0.3em] font-sans">Powering Top Engineering Teams</p>
+        <section className="py-12 sm:py-16 bg-background border-y border-border transition-colors duration-300 overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 text-center">
+                <p className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-[0.2em] sm:tracking-[0.3em] font-sans">Powering Top Engineering Teams</p>
             </div>
 
             <div className="relative flex overflow-x-hidden group">
                 {/* Gradient Masks for smooth fading */}
-                <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-background to-transparent z-10"></div>
-                <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-background to-transparent z-10"></div>
+                <div className="absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-background to-transparent z-10"></div>
+                <div className="absolute inset-y-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-background to-transparent z-10"></div>
 
-                <div className="animate-marquee whitespace-nowrap flex items-center gap-16 pl-10">
+                <div className="animate-marquee whitespace-nowrap flex items-center gap-8 sm:gap-16 pl-6 sm:pl-10">
                     {/* First set */}
                     {stack.map((tech, index) => (
-                        <div key={index} className="flex items-center gap-4 opacity-50 hover:opacity-100 transition-all duration-300 cursor-pointer group/item">
-                            {/* Icon Container with specific brand color */}
+                        <div key={index} className="flex items-center gap-2 sm:gap-4 opacity-50 hover:opacity-100 transition-all duration-300 cursor-pointer group/item">
                             <div
-                                className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-black/5 group-hover/item:scale-110 transition-transform duration-300"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-black/5 group-hover/item:scale-110 transition-transform duration-300"
                                 style={{ backgroundColor: tech.color }}
                             >
-                                {tech.icon}
+                                <div className="scale-75 sm:scale-100 flex items-center justify-center">
+                                    {tech.icon}
+                                </div>
                             </div>
-                            <span className="text-xl font-bold text-muted-foreground group-hover/item:text-foreground transition-colors font-sans">{tech.name}</span>
+                            <span className="text-base sm:text-xl font-bold text-muted-foreground group-hover/item:text-foreground transition-colors font-sans">{tech.name}</span>
                         </div>
                     ))}
 
                     {/* Duplicate set for infinite scroll */}
                     {stack.map((tech, index) => (
-                        <div key={`dup-${index}`} className="flex items-center gap-4 opacity-50 hover:opacity-100 transition-all duration-300 cursor-pointer group/item">
+                        <div key={`dup-${index}`} className="flex items-center gap-2 sm:gap-4 opacity-50 hover:opacity-100 transition-all duration-300 cursor-pointer group/item">
                             <div
-                                className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-black/5 group-hover/item:scale-110 transition-transform duration-300"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-black/5 group-hover/item:scale-110 transition-transform duration-300"
                                 style={{ backgroundColor: tech.color }}
                             >
-                                {tech.icon}
+                                <div className="scale-75 sm:scale-100 flex items-center justify-center">
+                                    {tech.icon}
+                                </div>
                             </div>
-                            <span className="text-xl font-bold text-muted-foreground group-hover/item:text-foreground transition-colors font-sans">{tech.name}</span>
+                            <span className="text-base sm:text-xl font-bold text-muted-foreground group-hover/item:text-foreground transition-colors font-sans">{tech.name}</span>
                         </div>
                     ))}
                 </div>

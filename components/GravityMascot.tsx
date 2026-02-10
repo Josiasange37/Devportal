@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 interface GravityMascotProps {
     message: string;
 }
@@ -20,9 +22,11 @@ export default function GravityMascot({ message }: GravityMascotProps) {
                 {/* Mascot Image */}
                 <div className="w-32 h-32 relative">
                     <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse"></div>
-                    <img
+                    <Image
                         src="/mascot.png"
                         alt="Gravity Mascot"
+                        width={128}
+                        height={128}
                         className="w-full h-full object-contain relative z-10 drop-shadow-2xl"
                     />
                 </div>

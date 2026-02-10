@@ -1,19 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import LoginForm from '@/components/LoginForm';
 import GravityMascot from '@/components/GravityMascot';
 
 export default function LoginPage() {
+    const searchParams = useSearchParams();
     const [step, setStep] = useState(1);
     const [name, setName] = useState('');
+    const [isLogin, setIsLogin] = useState(false);
+
+    useEffect(() => {
+        const mode = searchParams.get('mode');
+        if (mode === 'login') {
+            setIsLogin(true);
+        } else {
+            setIsLogin(false);
+        }
+    }, [searchParams]);
 
     const handleStepChange = (newStep: number, newName: string) => {
         setStep(newStep);
         if (newName) setName(newName);
+        // Reset login state if we are moving through steps (registration)
+        if (newStep > 1) setIsLogin(false);
     };
 
     const getMascotMessage = () => {
+        if (isLogin) return "Welcome back! Let's get you signed in.";
         switch (step) {
             case 1: return "Hi! I'm Gravity. What should we call you?";
             case 2: return `Nice to meet you, ${name}! Let's secure your account now.`;
@@ -48,11 +64,11 @@ export default function LoginPage() {
                     </h1>
                     <div className="flex items-center gap-6 mt-4">
                         <div className="flex -space-x-3">
-                            <div className="w-10 h-10 rounded-full border-2 border-background bg-gray-300 overflow-hidden">
-                                <img src="https://i.pravatar.cc/100?img=1" alt="User" />
+                            <div className="w-10 h-10 rounded-full border-2 border-background bg-gray-300 overflow-hidden relative">
+                                <Image src="https://i.pravatar.cc/100?img=1" alt="User" width={40} height={40} />
                             </div>
-                            <div className="w-10 h-10 rounded-full border-2 border-background bg-gray-400 overflow-hidden">
-                                <img src="https://i.pravatar.cc/100?img=2" alt="User" />
+                            <div className="w-10 h-10 rounded-full border-2 border-background bg-gray-400 overflow-hidden relative">
+                                <Image src="https://i.pravatar.cc/100?img=2" alt="User" width={40} height={40} />
                             </div>
                         </div>
                         <p className="text-sm text-muted-foreground max-w-[200px] font-medium leading-snug">
@@ -63,7 +79,11 @@ export default function LoginPage() {
 
                 {/* Right Side: The Form */}
                 <div className="flex justify-center lg:justify-end mt-16 lg:mt-0">
-                    <LoginForm onStepChange={handleStepChange} />
+                    <LoginForm
+                        onStepChange={handleStepChange}
+                        onModeToggle={(login) => setIsLogin(login)}
+                        isLogin={isLogin}
+                    />
                 </div>
             </div>
         </main>

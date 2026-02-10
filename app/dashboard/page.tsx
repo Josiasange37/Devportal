@@ -5,6 +5,7 @@ import DashboardStats from '@/components/DashboardStats';
 import ProjectList from '@/components/ProjectList';
 import { Bell, HelpCircle, Activity } from 'lucide-react';
 import GravityMascot from '@/components/GravityMascot';
+import Image from 'next/image';
 
 export default function DashboardPage() {
     return (
@@ -89,8 +90,14 @@ export default function DashboardPage() {
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute bottom-[120%] right-0">
                         <GravityMascot message="Need any help navigating your new space, John?" />
                     </div>
-                    <div className="w-20 h-20 rounded-full bg-card/80 backdrop-blur-xl border border-primary/20 flex items-center justify-center animate-bounce shadow-2xl cursor-pointer hover:border-primary/50 transition-colors">
-                        <img src="/mascot.png" alt="Gravity" className="w-14 h-14 object-contain" />
+                    <div className="w-20 h-20 rounded-full bg-card/80 backdrop-blur-xl border border-primary/20 flex items-center justify-center animate-bounce shadow-2xl cursor-pointer hover:border-primary/50 transition-colors relative overflow-hidden">
+                        <Image
+                            src="/mascot.png"
+                            alt="Gravity"
+                            width={56}
+                            height={56}
+                            className="w-14 h-14 object-contain"
+                        />
                     </div>
                 </div>
             </main>
