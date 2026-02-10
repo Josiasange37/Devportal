@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import LoginForm from '@/components/LoginForm';
 import GravityMascot from '@/components/GravityMascot';
 
-export default function LoginPage() {
+function LoginContent() {
     const searchParams = useSearchParams();
     const [step, setStep] = useState(1);
     const [name, setName] = useState('');
@@ -87,5 +87,13 @@ export default function LoginPage() {
                 </div>
             </div>
         </main>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background text-foreground uppercase font-bold tracking-widest animate-pulse">Loading...</div>}>
+            <LoginContent />
+        </Suspense>
     );
 }
