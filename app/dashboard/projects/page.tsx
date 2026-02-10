@@ -29,125 +29,120 @@ const projects = [
 
 export default function ProjectsPage() {
     return (
-        <div className="animate-in fade-in duration-700">
-            {/* Page Header */}
-            <header className="glass-premium squircle-md h-16 lg:h-20 px-4 lg:px-8 flex items-center justify-between mb-6 lg:mb-8 animate-in fade-in slide-in-from-top-6 duration-1000 ease-out">
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <h1 className="text-lg lg:text-xl font-black tracking-tight">Projects</h1>
+        <div className="animate-in fade-in duration-1000">
+            {/* Page Title Section */}
+            <div className="mb-6 lg:mb-8">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(79,70,229,0.5)]"></div>
+                    <span className="text-[9px] lg:text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Operational Status: Active</span>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl lg:text-3xl font-bold text-white tracking-tight mb-1 lg:mb-2">Projects</h1>
+                        <p className="text-[#94A3B8] text-xs lg:text-sm">Managing 12 Active Missions across 5 sectors.</p>
                     </div>
-                    <p className="hidden xs:block text-[8px] lg:text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold opacity-60">
-                        Managing 12 Active Missions
-                    </p>
-                </div>
-
-                <div className="flex items-center gap-2 lg:gap-3">
-                    <ThemeToggle />
-                    <button className="p-2.5 lg:p-3 glass-premium hover:bg-foreground/5 dark:hover:bg-white/10 rounded-2xl transition-all relative group shadow-none">
-                        <Bell size={18} className="text-muted-foreground group-hover:text-primary lg:size-5" />
-                        <span className="absolute top-2.5 right-2.5 lg:top-3 lg:right-3 w-2 h-2 bg-primary rounded-full ring-4 ring-background"></span>
-                    </button>
-                    <div className="hidden lg:block w-[1px] h-8 bg-border dark:bg-white/10 mx-2"></div>
-                    <button className="flex items-center gap-2 px-4 lg:px-6 py-2.5 lg:py-3 bg-primary text-primary-foreground rounded-xl lg:rounded-2xl font-black text-xs lg:text-sm shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all">
-                        <Plus size={18} />
-                        <span className="hidden lg:inline">New Project</span>
+                    <button className="flex items-center justify-center gap-2 px-5 py-3 bg-primary text-primary-foreground rounded-2xl font-bold text-xs lg:text-sm shadow-xl shadow-primary/20 hover:shadow-primary/40 sm:hover:-translate-y-1 transition-all w-full sm:w-auto">
+                        <Plus size={16} className="lg:size-[18px]" />
+                        New Project
                     </button>
                 </div>
-            </header>
+            </div>
 
             {/* Content Control Bar */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-                <div className="flex items-center gap-2 w-full md:w-auto">
-                    <div className="flex-1 md:w-72 relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground size-4 group-focus-within:text-primary transition-colors" />
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-[#1A1A24] border border-white/5 p-4 rounded-2xl">
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="flex-1 md:w-80 relative group">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#64748B] size-4 group-focus-within:text-primary transition-colors" />
                         <input
                             type="text"
-                            placeholder="Filter projects..."
-                            className="w-full pl-11 pr-4 py-3 bg-foreground/5 dark:bg-white/5 border border-border dark:border-white/5 rounded-2xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm font-medium"
+                            placeholder="Find a mission..."
+                            className="w-full pl-11 pr-4 py-2.5 bg-white/5 border border-white/5 rounded-xl outline-none focus:border-primary/50 transition-all text-sm font-medium text-white placeholder:text-[#64748B]"
                         />
                     </div>
-                    <button className="p-3 bg-foreground/5 dark:bg-white/5 border border-border dark:border-white/5 rounded-2xl hover:bg-foreground/10 transition-all">
-                        <Filter size={20} className="text-muted-foreground" />
+                    <button className="p-2.5 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-all group">
+                        <Filter size={18} className="text-[#94A3B8] group-hover:text-white" />
                     </button>
                 </div>
 
-                <div className="flex items-center gap-2 bg-foreground/5 dark:bg-white/5 p-1.5 rounded-2xl border border-border dark:border-white/5">
-                    <button className="p-2 bg-background shadow-sm rounded-xl text-primary">
+                <div className="flex items-center gap-2 bg-black/20 p-1 rounded-xl border border-white/5">
+                    <button className="p-2 bg-primary text-white shadow-lg rounded-lg transition-all">
                         <LayoutGrid size={18} />
                     </button>
-                    <button className="p-2 text-muted-foreground hover:text-foreground">
+                    <button className="p-2 text-[#64748B] hover:text-white transition-all">
                         <ListIcon size={18} />
                     </button>
                 </div>
             </div>
 
             {/* Project Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-24 lg:pb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-24 lg:pb-12">
                 {projects.map((project, i) => (
                     <div
                         key={project.id}
-                        className="glass-premium squircle-md p-6 group hover:scale-[1.02] transition-all duration-500 border-border animate-in fade-in slide-in-from-bottom-8"
-                        style={{ animationDelay: `${i * 0.1 + 0.3}s` }}
+                        className="bg-[#1A1A24] border border-white/5 rounded-2xl p-6 group hover:border-primary/30 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 relative overflow-hidden"
+                        style={{ animationDelay: `${i * 0.1}s` }}
                     >
                         <div className="flex items-start justify-between mb-6">
-                            <div className={`w-14 h-14 rounded-2xl ${project.color}/10 border border-${project.color.split('-')[1]}-500/20 flex items-center justify-center text-2xl font-black text-${project.color.split('-')[1]}-500 shadow-inner group-hover:scale-110 transition-transform duration-500`}>
+                            <div className={`w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-xl font-bold text-primary group-hover:scale-110 transition-transform duration-500`}>
                                 {project.icon}
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${project.status === 'Completed' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
-                                        project.status === 'At Risk' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
-                                            'bg-primary/10 text-primary border-primary/20'
+                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${project.status === 'Completed' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                    project.status === 'At Risk' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                                        'bg-blue-500/10 text-blue-400 border-blue-500/20'
                                     }`}>
                                     {project.status}
                                 </span>
-                                <button className="p-2 text-muted-foreground hover:text-foreground">
-                                    <MoreVertical size={18} />
+                                <button className="p-1.5 text-[#64748B] hover:text-white transition-colors">
+                                    <MoreVertical size={16} />
                                 </button>
                             </div>
                         </div>
 
                         <div className="mb-8">
-                            <h3 className="text-xl font-black tracking-tight mb-1 group-hover:text-primary transition-colors">{project.name}</h3>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground font-bold">
+                            <h3 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{project.name}</h3>
+                            <div className="flex items-center gap-2 text-[11px] text-[#94A3B8] font-medium">
                                 <UserIcon size={12} className="opacity-50" />
                                 {project.client}
                             </div>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-5">
                             <div className="flex justify-between items-end">
                                 <div className="space-y-1">
-                                    <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest opacity-50">Budget</p>
-                                    <p className="text-sm font-black">{project.budget}</p>
+                                    <p className="text-[10px] text-[#64748B] font-bold uppercase tracking-widest opacity-60">Revenue</p>
+                                    <p className="text-sm font-bold text-white">{project.budget}</p>
                                 </div>
                                 <div className="text-right space-y-1">
-                                    <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest opacity-50">Progress</p>
-                                    <p className="text-sm font-black">{project.progress}%</p>
+                                    <p className="text-[10px] text-[#64748B] font-bold uppercase tracking-widest opacity-60">Completion</p>
+                                    <p className="text-sm font-bold text-white">{project.progress}%</p>
                                 </div>
                             </div>
 
-                            <div className="h-2 w-full bg-foreground/5 dark:bg-black/20 rounded-full overflow-hidden p-[2px] border border-border/50 dark:border-white/5">
+                            <div className="h-1.5 w-full bg-black/20 rounded-full overflow-hidden p-[1px] border border-white/5">
                                 <div
                                     className={`h-full transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] rounded-full ${project.progress === 100
-                                            ? 'bg-gradient-to-r from-green-400 to-green-600'
-                                            : 'bg-gradient-to-r from-blue-400 to-primary'
+                                        ? 'bg-green-500'
+                                        : 'bg-primary'
                                         }`}
                                     style={{ width: `${project.progress}%` }}
                                 ></div>
                             </div>
 
-                            <div className="pt-4 flex items-center justify-between border-t border-border dark:border-white/5">
-                                <div className="flex items-center gap-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">
-                                    <Calendar size={12} />
+                            <div className="pt-4 flex items-center justify-between border-t border-white/5 mt-4">
+                                <div className="flex items-center gap-2 text-[10px] font-bold text-[#64748B] uppercase tracking-widest">
+                                    <Clock size={12} />
                                     {project.date}
                                 </div>
                                 <div className="flex -space-x-2">
-                                    {[1, 2, 3].map((_, i) => (
-                                        <div key={i} className={`w-7 h-7 rounded-full border-2 border-background dark:border-slate-900 bg-foreground/10 dark:bg-white/10 flex items-center justify-center text-[10px] font-bold`}>
-                                            <UserIcon size={12} />
+                                    {[1, 2].map((_, i) => (
+                                        <div key={i} className="w-6 h-6 rounded-full border-2 border-[#1A1A24] bg-white/10 flex items-center justify-center text-[10px] font-bold text-white">
+                                            <UserIcon size={10} />
                                         </div>
                                     ))}
+                                    <div className="w-6 h-6 rounded-full border-2 border-[#1A1A24] bg-primary flex items-center justify-center text-[8px] font-bold text-white">
+                                        +2
+                                    </div>
                                 </div>
                             </div>
                         </div>

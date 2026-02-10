@@ -21,103 +21,98 @@ import ThemeToggle from '@/components/ThemeToggle';
 
 export default function SupportPage() {
     return (
-        <div className="animate-in fade-in duration-700">
-            {/* Page Header */}
-            <header className="glass-premium squircle-md h-16 lg:h-20 px-4 lg:px-8 flex items-center justify-between mb-6 lg:mb-8 animate-in fade-in slide-in-from-top-6 duration-1000 ease-out">
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <h1 className="text-lg lg:text-xl font-black tracking-tight">Mission Control</h1>
+        <div className="animate-in fade-in duration-1000">
+            {/* Page Title Section */}
+            <div className="mb-10">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(79,70,229,0.5)]"></div>
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Operational Status: Mission Control Online</span>
+                </div>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-white tracking-tight mb-2">Intelligence</h1>
+                        <p className="text-[#94A3B8] text-sm">Accessing documentation, resources, and tactical support.</p>
                     </div>
-                    <p className="hidden xs:block text-[8px] lg:text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold opacity-60">
-                        Help, Documentation & Community
-                    </p>
-                </div>
-
-                <div className="flex items-center gap-2 lg:gap-3">
-                    <ThemeToggle />
-                    <button className="p-2.5 lg:p-3 glass-premium hover:bg-foreground/5 dark:hover:bg-white/10 rounded-2xl transition-all relative group shadow-none">
-                        <Bell size={18} className="text-muted-foreground group-hover:text-primary lg:size-5" />
-                        <span className="absolute top-2.5 right-2.5 lg:top-3 lg:right-3 w-2 h-2 bg-primary rounded-full ring-4 ring-background"></span>
-                    </button>
-                    <div className="hidden lg:block w-[1px] h-8 bg-border dark:bg-white/10 mx-2"></div>
-                    <button className="flex items-center gap-2 px-4 lg:px-6 py-2.5 lg:py-3 bg-primary text-primary-foreground rounded-xl lg:rounded-2xl font-black text-xs lg:text-sm shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all">
+                    <button className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-2xl font-bold text-sm shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all">
                         <MessageCircle size={18} />
-                        <span className="hidden lg:inline">Live Chat</span>
+                        Open Comms
                     </button>
                 </div>
-            </header>
+            </div>
 
-            <div className="space-y-8 pb-24 lg:pb-12">
+            <div className="space-y-12 pb-24 lg:pb-12">
                 {/* Search & Intro */}
-                <div className="glass-premium squircle-md p-8 lg:p-12 text-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/0 via-primary to-primary/0"></div>
-                    <h2 className="text-2xl lg:text-3xl font-black tracking-tight mb-4">How can we assist your mission?</h2>
-                    <div className="max-w-2xl mx-auto relative group">
-                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                <div className="bg-[#1A1A24] border border-white/5 rounded-3xl p-10 lg:p-16 text-center relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-50"></div>
+                    <h2 className="text-2xl lg:text-3xl font-bold text-white tracking-tight mb-8">Intelligence Retrieval System</h2>
+                    <div className="max-w-2xl mx-auto relative">
+                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-[#64748B] group-focus-within:text-primary transition-colors" />
                         <input
                             type="text"
-                            placeholder="Find answers in documentation, FAQs, or community..."
-                            className="w-full pl-14 pr-6 py-5 bg-foreground/5 dark:bg-white/5 border border-border dark:border-white/10 rounded-[2rem] outline-none focus:ring-4 focus:ring-primary/10 transition-all text-lg font-bold"
+                            placeholder="Interrogate documentation or community archives..."
+                            className="w-full pl-16 pr-8 py-5 bg-white/5 border border-white/5 rounded-2xl outline-none focus:border-primary/50 transition-all text-lg font-medium text-white placeholder:text-[#64748B]"
                         />
                     </div>
                 </div>
 
-                {/* Support Grid */}
+                {/* Support Categories */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {[
-                        { title: 'Documentation', desc: 'Detailed guides on every feature.', icon: <Book className="text-blue-500" />, count: '45 Articles' },
-                        { title: 'Community Guild', desc: 'Connect with fellow adventurers.', icon: <Zap className="text-orange-500" />, count: '12k Members' },
-                        { title: 'Status Center', desc: 'Live monitoring of portal core.', icon: <Cpu className="text-green-500" />, count: 'All Systems Go' },
+                        { title: 'Archives', desc: 'Detailed tactical guides on every system.', icon: <Book className="text-blue-400" />, count: '45 Datasheets' },
+                        { title: 'Nexus Community', desc: 'Connect with fellow adventurers.', icon: <Zap className="text-orange-400" />, count: '12k Members' },
+                        { title: 'System Vitals', desc: 'Live monitoring of portal core.', icon: <Cpu className="text-green-400" />, count: 'All Systems Nominal' },
                     ].map((card, i) => (
-                        <div key={i} className="glass-premium squircle-md p-8 group hover:scale-[1.03] transition-all duration-500 border-border/50 cursor-pointer">
-                            <div className="w-14 h-14 rounded-2xl bg-foreground/5 dark:bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <div key={i} className="bg-[#1A1A24] border border-white/5 rounded-2xl p-8 group hover:border-primary/30 transition-all duration-500 cursor-pointer">
+                            <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-500">
                                 {card.icon}
                             </div>
-                            <h3 className="text-xl font-black mb-1">{card.title}</h3>
-                            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-60 mb-6">{card.desc}</p>
-                            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-primary">
+                            <h3 className="text-xl font-bold text-white mb-2">{card.title}</h3>
+                            <p className="text-[10px] text-[#64748B] font-bold uppercase tracking-widest mb-8 leading-relaxed">{card.desc}</p>
+                            <div className="flex items-center justify-between pt-6 border-t border-white/5 text-[10px] font-bold uppercase tracking-widest text-primary">
                                 <span>{card.count}</span>
-                                <ExternalLink size={14} />
+                                <ExternalLink size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* FAQ Style List */}
-                <div className="glass-premium squircle-md overflow-hidden">
-                    <div className="p-8 border-b border-border dark:border-white/5">
-                        <h3 className="text-xl font-black tracking-tight">Frequent Transmissions</h3>
+                {/* Intelligence Feed (FAQ) */}
+                <div className="bg-[#1A1A24] border border-white/5 rounded-2xl overflow-hidden">
+                    <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+                        <h3 className="text-xl font-bold text-white tracking-tight">Recent Intelligence</h3>
                     </div>
-                    <div className="divide-y divide-border dark:divide-white/5">
+                    <div className="divide-y divide-white/5">
                         {[
-                            'How do I sync my invoices to local storage?',
-                            'Can I change my crew role after onboarding?',
-                            'What is the maximum project capacity in Orbit?',
-                            'How do I customize my portal theme colors?'
+                            'Tactical maneuvers for invoice synchronization',
+                            'Crew role re-assignment protocols',
+                            'Infrastructure mission capacity limits',
+                            'Portal aesthetic customization override'
                         ].map((q, i) => (
-                            <div key={i} className="p-6 flex items-center justify-between hover:bg-foreground/5 transition-colors cursor-pointer group">
-                                <span className="font-bold text-sm lg:text-base group-hover:text-primary transition-colors">{q}</span>
-                                <ChevronRight size={18} className="text-muted-foreground" />
+                            <div key={i} className="p-6 flex items-center justify-between hover:bg-white/[0.02] transition-colors cursor-pointer group">
+                                <span className="font-medium text-white group-hover:text-primary transition-colors text-sm lg:text-base">{q}</span>
+                                <div className="p-2 bg-white/5 rounded-lg text-[#64748B] group-hover:text-white transition-colors">
+                                    <ChevronRight size={18} />
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Contact Footer */}
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 glass-premium squircle-md bg-primary/5 border-primary/20">
-                    <div className="flex items-center gap-4 text-center md:text-left">
-                        <div className="p-4 bg-primary rounded-2xl text-white shadow-xl shadow-primary/20">
-                            <LifeBuoy size={24} />
+                {/* Transmission Uplink */}
+                <div className="flex flex-col md:flex-row items-center justify-between gap-8 p-10 bg-primary/5 border border-primary/20 rounded-3xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32"></div>
+                    <div className="flex items-center gap-6 relative z-10">
+                        <div className="w-16 h-16 bg-primary rounded-2xl text-white flex items-center justify-center shadow-2xl shadow-primary/40 animate-pulse">
+                            <LifeBuoy size={32} />
                         </div>
                         <div>
-                            <h4 className="text-lg font-black tracking-tight">Still stranded?</h4>
-                            <p className="text-xs text-muted-foreground font-bold opacity-70 uppercase tracking-widest">Our crew is on standby 24/7</p>
+                            <h4 className="text-xl font-bold text-white tracking-tight mb-1">Signal Lost?</h4>
+                            <p className="text-[10px] text-primary font-bold uppercase tracking-[0.2em]">Deployment crew on standby 24/7</p>
                         </div>
                     </div>
-                    <div className="flex gap-4">
-                        <button className="flex items-center gap-2 px-6 py-3 bg-foreground p-1 text-background rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all">
-                            <Mail size={16} /> Contact Support
+                    <div className="relative z-10 w-full md:w-auto">
+                        <button className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-4 bg-primary text-white rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all">
+                            <Mail size={16} /> Establish Uplink
                         </button>
                     </div>
                 </div>

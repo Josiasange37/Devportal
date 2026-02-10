@@ -4,40 +4,40 @@ import { TrendingUp, TrendingDown, DollarSign, Briefcase, FileText, Wallet } fro
 
 const stats = [
     {
-        label: 'Total Revenue',
-        value: '$45,231.89',
-        change: '+20.1%',
-        isUp: true,
-        icon: <DollarSign size={24} />,
-        color: 'from-blue-500 to-primary',
-        glow: 'bg-primary/20'
-    },
-    {
         label: 'Active Projects',
         value: '12',
-        change: '+2 new',
+        change: '+2 this week',
         isUp: true,
-        icon: <Briefcase size={24} />,
+        icon: <Briefcase size={22} />,
+        color: 'from-[#4F46E5] to-[#818CF8]',
+        glow: 'bg-[#4F46E5]/20'
+    },
+    {
+        label: 'Weekly Commits',
+        value: '148',
+        change: '+24%',
+        isUp: true,
+        icon: <TrendingUp size={22} />,
         color: 'from-green-400 to-green-600',
         glow: 'bg-green-500/20'
     },
     {
-        label: 'Invoices Sent',
-        value: '254',
-        change: '+12%',
-        isUp: true,
-        icon: <FileText size={24} />,
-        color: 'from-indigo-400 to-indigo-600',
-        glow: 'bg-indigo-500/20'
-    },
-    {
-        label: 'Pending Payout',
-        value: '$2,405.00',
-        change: '-2% slow',
+        label: 'Pending Invoices',
+        value: '$12,405',
+        change: '3 overdue',
         isUp: false,
-        icon: <Wallet size={24} />,
+        icon: <FileText size={22} />,
         color: 'from-orange-400 to-orange-600',
         glow: 'bg-orange-500/20'
+    },
+    {
+        label: 'Upcoming Meetings',
+        value: '4',
+        change: 'Next in 2h',
+        isUp: true,
+        icon: <Wallet size={22} />,
+        color: 'from-blue-400 to-blue-600',
+        glow: 'bg-blue-500/20'
     },
 ];
 
@@ -47,30 +47,28 @@ export default function DashboardStats() {
             {stats.map((stat, i) => (
                 <div
                     key={i}
-                    className="bento-card p-5 lg:p-7 group relative overflow-hidden bg-foreground/[0.02] dark:bg-white/[0.02] border border-border/50 dark:border-white/5 rounded-3xl lg:rounded-[2.5rem]"
+                    className="p-6 relative overflow-hidden bg-[#1A1A24] border border-white/5 rounded-2xl group hover:border-primary/50 transition-all duration-300"
                 >
                     {/* Ambient Glow */}
-                    <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-40 transition-opacity duration-700 ${stat.glow}`}></div>
+                    <div className={`absolute -top-12 -right-12 w-24 h-24 rounded-full blur-[40px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 ${stat.glow}`}></div>
 
                     <div className="flex flex-col h-full relative z-10">
-                        <div className="flex justify-between items-start mb-4 lg:mb-6">
-                            <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg shadow-black/10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}>
-                                <div className="scale-90 lg:scale-100">
-                                    {stat.icon}
-                                </div>
+                        <div className="flex justify-between items-start mb-4">
+                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}>
+                                {stat.icon}
                             </div>
-                            <div className={`flex items-center gap-1 text-[9px] lg:text-[10px] font-bold px-2 lg:px-2.5 py-1 rounded-full backdrop-blur-md border ${stat.isUp
-                                    ? 'bg-green-500/10 text-green-500 border-green-500/20'
-                                    : 'bg-red-500/10 text-red-500 border-red-500/20'
+                            <div className={`flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-md border ${stat.isUp
+                                ? 'bg-green-500/10 text-green-500 border-green-500/20'
+                                : 'bg-red-500/10 text-red-500 border-red-500/20'
                                 }`}>
-                                {stat.isUp ? <TrendingUp size={10} className="lg:size-3" /> : <TrendingDown size={10} className="lg:size-3" />}
+                                {stat.isUp ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
                                 {stat.change}
                             </div>
                         </div>
 
-                        <div className="mt-auto">
-                            <p className="text-[10px] lg:text-xs font-bold text-muted-foreground uppercase tracking-[0.15em] lg:tracking-[0.2em] mb-1 lg:mb-2 opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</p>
-                            <h2 className="text-2xl lg:text-3xl font-extrabold tracking-tight group-hover:translate-x-1 transition-transform duration-500">
+                        <div>
+                            <p className="text-[11px] font-medium text-[#94A3B8] uppercase tracking-wider mb-1">{stat.label}</p>
+                            <h2 className="text-2xl font-bold tracking-tight text-white group-hover:translate-x-1 transition-transform duration-500">
                                 {stat.value}
                             </h2>
                         </div>
