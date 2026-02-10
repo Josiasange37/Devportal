@@ -36,11 +36,13 @@ export default function StructuredData({ nonce }: { nonce?: string }) {
             <script
                 type="application/ld+json"
                 nonce={nonce}
+                suppressHydrationWarning
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
             />
             <script
                 type="application/ld+json"
                 nonce={nonce}
+                suppressHydrationWarning
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareData) }}
             />
         </>
