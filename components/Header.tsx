@@ -96,7 +96,7 @@ export default function Header() {
                                 key={item.name}
                                 href={item.href}
                                 onClick={() => setIsMenuOpen(false)}
-                                className={`text-3xl font-bold py-6 border-b border-border/40 hover:text-primary transition-all duration-300 ${isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'
+                                className={`text-2xl font-bold py-5 border-b border-border/40 hover:text-primary transition-all duration-300 ${isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'
                                     }`}
                                 style={{ transitionDelay: `${index * 50}ms` }}
                             >
@@ -110,14 +110,14 @@ export default function Header() {
                         <Link
                             href="/login?mode=login"
                             onClick={() => setIsMenuOpen(false)}
-                            className="w-full py-5 rounded-2xl text-center font-bold text-xl bg-secondary text-foreground hover:bg-secondary/80 transition-all"
+                            className="w-full py-4 rounded-2xl text-center font-bold text-lg bg-secondary text-foreground hover:bg-secondary/80 transition-all"
                         >
                             Sign In
                         </Link>
                         <Link
                             href="/login?mode=register"
                             onClick={() => setIsMenuOpen(false)}
-                            className="w-full py-5 rounded-2xl text-center font-bold text-xl bg-primary text-primary-foreground shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                            className="w-full py-4 rounded-2xl text-center font-bold text-lg bg-primary text-primary-foreground shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
                         >
                             Get Started Free
                         </Link>
