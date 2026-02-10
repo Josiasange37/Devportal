@@ -91,27 +91,9 @@ export default function DashboardLayout({
 
             <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden pl-0 lg:pl-[240px] transition-all duration-300">
                 <TopBar />
-                <main className="flex-1 overflow-y-auto relative z-10 scrollbar-hide pb-24 lg:pb-8">
-                    <div className="max-w-[1200px] mx-auto px-4 sm:px-8 py-6 lg:py-8">
-                        {children}
-                    </div>
+                <main className="flex-1 flex flex-col min-h-0 relative z-10 overflow-hidden">
+                    {children}
 
-                    {/* iPhone 17 Fixed Contact Mascot */}
-                    <div className="fixed bottom-10 right-10 z-40 group animate-in fade-in zoom-in duration-1000 delay-1000">
-                        <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-all duration-500 absolute bottom-[120%] right-0 translate-y-2 group-hover:translate-y-0 pointer-events-none w-64">
-                            <GravityMascot message={`Welcome back, ${displayName}! Any missions for today?`} />
-                        </div>
-                        <button className="w-16 h-16 lg:w-20 lg:h-20 rounded-[2.5rem] bg-[#1A1A24]/50 backdrop-blur-xl border border-white/5 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-500 shadow-2xl relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <Image
-                                src="/mascot.png"
-                                alt="Gravity"
-                                width={56}
-                                height={56}
-                                className="w-10 h-10 lg:w-14 lg:h-14 object-contain relative z-10"
-                            />
-                        </button>
-                    </div>
                 </main>
             </div>
         </div>

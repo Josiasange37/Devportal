@@ -1,139 +1,168 @@
 'use client';
 
+import { AnimateOnScroll, staggerDelay } from '@/hooks/useScrollAnimation';
+
 export default function Features() {
     return (
-        <section id="features" className="py-20 sm:py-24 bg-background transition-colors duration-300 relative overflow-hidden">
+        <section id="features" className="py-24 sm:py-32 bg-background transition-colors duration-300 relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-                {/* Section Header */}
-                <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-                    <h2 className="text-xs sm:text-sm font-bold text-primary tracking-widest uppercase mb-3">Capabilities</h2>
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6 font-sans text-balance">
-                        Powerful Tools for <br className="sm:hidden" /> <span className="text-primary">Modern Work</span>
-                    </h3>
-                    <p className="text-muted-foreground text-lg sm:text-xl">
+                {/* Section Header — LEFT aligned (1st section) */}
+                <AnimateOnScroll animation="fade-right" className="max-w-2xl mb-16 sm:mb-20">
+                    <p className="text-xs font-bold text-primary tracking-[0.25em] uppercase mb-4">Capabilities</p>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight tracking-tight mb-6">
+                        Powerful tools for{' '}
+                        <span className="font-script text-primary capitalize text-4xl sm:text-5xl md:text-6xl">modern</span>{' '}
+                        work
+                    </h2>
+                    <p className="text-muted-foreground text-base sm:text-lg max-w-lg">
                         A centralized operating system designed exclusively for the freelance economy.
                     </p>
-                </div>
+                </AnimateOnScroll>
 
-                {/* Bento Grid Container */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
+                {/* Bento Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-5">
 
-                    {/* Card 1: Client Portal (Wide) */}
-                    <div className="md:col-span-8 group relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-card border border-border p-6 sm:p-10 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500">
-                        <div className="flex flex-col h-full justify-between">
+                    {/* Card 1: Hero card — 7 cols */}
+                    <AnimateOnScroll animation="fade-up" delay="0ms" className="md:col-span-7">
+                        <div className="group relative overflow-hidden rounded-3xl sm:rounded-4xl bg-card border border-border p-8 sm:p-10 min-h-[320px] flex flex-col justify-between hover:border-primary/20 transition-all duration-500 h-full">
                             <div>
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 font-bold">
-                                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" /></svg>
+                                    </div>
+                                    <span className="text-xs font-bold text-muted-foreground tracking-wider uppercase">Client Portal</span>
                                 </div>
-                                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-4 font-sans">White-Label Client Portal</h3>
-                                <p className="text-muted-foreground text-sm sm:text-base max-w-md mb-8">
-                                    Give your clients a professional dashboard under your own brand. Track progress, share files, and manage feedback in one place.
+                                <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 tracking-tight leading-tight">
+                                    White-label dashboard<br />under your brand
+                                </h3>
+                                <p className="text-muted-foreground text-sm sm:text-base max-w-md leading-relaxed">
+                                    Give clients a professional portal to track progress, share files, and manage feedback — all under your own branding.
                                 </p>
                             </div>
-                            <div className="bg-background/50 border border-border rounded-xl sm:rounded-2xl p-4 shadow-sm">
-                                <div className="flex items-center gap-3 mb-3 pb-3 border-b border-border/50">
-                                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary/10"></div>
-                                    <div className="h-2.5 w-20 sm:w-24 bg-muted rounded-full"></div>
+                            <div className="mt-8 bg-background/60 border border-border/50 rounded-2xl p-4 sm:p-5">
+                                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border/40">
+                                    <div className="w-7 h-7 rounded-full bg-primary/10" />
+                                    <div className="h-2 w-20 bg-muted rounded-full" />
+                                    <div className="ml-auto h-2 w-12 bg-primary/20 rounded-full" />
                                 </div>
-                                <div className="space-y-2">
-                                    <div className="h-1.5 w-full bg-muted rounded-full opacity-50"></div>
-                                    <div className="h-1.5 w-3/4 bg-muted rounded-full opacity-50"></div>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="h-14 bg-muted/40 rounded-xl" />
+                                    <div className="h-14 bg-muted/40 rounded-xl" />
+                                    <div className="h-14 bg-primary/10 rounded-xl" />
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </AnimateOnScroll>
 
-                    {/* Card 2: AI Meetings */}
-                    <div className="md:col-span-4 group relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-primary p-6 sm:p-10 text-white shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all duration-500">
-                        <div className="relative z-10 flex flex-col h-full justify-between">
+                    {/* Card 2: Accent — 5 cols */}
+                    <AnimateOnScroll animation="fade-up" delay="120ms" className="md:col-span-5">
+                        <div className="group relative overflow-hidden rounded-3xl sm:rounded-4xl bg-primary p-8 sm:p-10 text-white shadow-xl shadow-primary/15 hover:shadow-primary/25 transition-all duration-500 flex flex-col justify-between min-h-[320px] h-full">
                             <div>
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-white mb-6">
-                                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 00-2 2z" /></svg>
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center text-white">
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                                    </div>
+                                    <span className="text-xs font-bold text-white/70 tracking-wider uppercase">AI Meetings</span>
                                 </div>
-                                <h3 className="text-xl sm:text-2xl font-bold mb-4 font-sans">AI-Powered Meetings</h3>
-                                <p className="text-sm sm:text-base opacity-80">Automatic transcription and action-item generation for every client call.</p>
+                                <h3 className="text-2xl sm:text-3xl font-bold mb-3 tracking-tight leading-tight">
+                                    Transcription &amp; action items, automatically
+                                </h3>
+                                <p className="text-white/70 text-sm sm:text-base leading-relaxed">
+                                    Every client call generates a summary with next steps. No more &quot;what did we decide?&quot;
+                                </p>
                             </div>
                             <div className="mt-8 flex -space-x-2">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border-2 border-primary bg-white/20"></div>
+                                {[1, 2, 3, 4].map(i => (
+                                    <div key={i} className="w-8 h-8 rounded-full border-2 border-primary bg-white/15 backdrop-blur-sm" />
                                 ))}
+                                <div className="w-8 h-8 rounded-full border-2 border-primary bg-white/25 backdrop-blur-sm flex items-center justify-center text-[10px] font-bold">+5</div>
                             </div>
+                            <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-white/5 rounded-full blur-3xl" />
                         </div>
-                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-                    </div>
+                    </AnimateOnScroll>
 
-                    {/* Card 3: GitHub Sync */}
-                    <div className="md:col-span-4 group relative overflow-hidden rounded-[2rem] bg-card border border-border p-6 sm:p-10 hover:shadow-2xl transition-all duration-500">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 dark:bg-secondary/50 rounded-xl flex items-center justify-center text-foreground mb-6">
-                            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 sm:w-6 sm:h-6"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.05-.015-2.07-3.345.72-4.05-1.605-4.05-1.605-.54-1.38-1.335-1.755-1.335-1.755-1.095-.75.09-.735.09-.735 1.2.09 1.83 1.23 1.83 1.23 1.08 1.86 2.805 1.32 3.495 1.005.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405 1.02 0 2.04.135 3 .405 2.28-1.545 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
-                        </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 font-sans">Smart Repo Sync</h3>
-                        <p className="text-muted-foreground text-xs sm:text-sm">Translates commits into non-technical progress updates for clients.</p>
-                    </div>
-
-                    {/* Card 4: AI Contract Review */}
-                    <div className="md:col-span-4 group relative overflow-hidden rounded-[2rem] bg-card border border-border p-6 sm:p-10 hover:shadow-2xl transition-all duration-500">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-50 dark:bg-purple-900/20 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
-                            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 font-sans">AI Legal Shield</h3>
-                        <p className="text-muted-foreground text-xs sm:text-sm">Instant analysis of contracts to detect risky clauses and missing info.</p>
-                    </div>
-
-                    {/* Card 5: Invoices */}
-                    <div className="md:col-span-4 group relative overflow-hidden rounded-[2rem] bg-card border border-border p-6 sm:p-10 hover:shadow-2xl transition-all duration-500">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 dark:bg-green-900/20 rounded-xl flex items-center justify-center text-green-600 dark:text-green-400 mb-6">
-                            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                        </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 font-sans">Automated Invoicing</h3>
-                        <p className="text-muted-foreground text-xs sm:text-sm">Smart reminders and automated payment releases linked to milestones.</p>
-                    </div>
-
-                    {/* Card 6: Large Global Card (Wide at bottom) */}
-                    <div className="md:col-span-12 group relative overflow-hidden rounded-[2.5rem] sm:rounded-[3rem] bg-slate-900 p-8 sm:p-12 text-white shadow-2xl hover:scale-[1.01] transition-all duration-500">
-                        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
-                            <div>
-                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-[10px] font-bold uppercase tracking-widest mb-6 border border-blue-500/30">
-                                    Global Scale
+                    {/* Bottom row: 3 × 4cols */}
+                    {[
+                        {
+                            icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.05-.015-2.07-3.345.72-4.05-1.605-4.05-1.605-.54-1.38-1.335-1.755-1.335-1.755-1.095-.75.09-.735.09-.735 1.2.09 1.83 1.23 1.83 1.23 1.08 1.86 2.805 1.32 3.495 1.005.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405 1.02 0 2.04.135 3 .405 2.28-1.545 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>,
+                            iconBg: 'bg-gray-100 dark:bg-white/5',
+                            iconColor: 'text-foreground',
+                            title: 'Smart Repo Sync',
+                            desc: 'Translates commits into clear progress updates your clients actually understand.'
+                        },
+                        {
+                            icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>,
+                            iconBg: 'bg-purple-500/10',
+                            iconColor: 'text-purple-500',
+                            title: 'AI Legal Shield',
+                            desc: 'Instant analysis of contracts to detect risky clauses, missing info, and red flags.'
+                        },
+                        {
+                            icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>,
+                            iconBg: 'bg-emerald-500/10',
+                            iconColor: 'text-emerald-500',
+                            title: 'Automated Invoicing',
+                            desc: 'Smart reminders and automated payment releases linked to project milestones.'
+                        }
+                    ].map((card, i) => (
+                        <AnimateOnScroll key={i} animation="fade-up" delay={staggerDelay(i, 100)} className="md:col-span-4">
+                            <div className="group relative overflow-hidden rounded-3xl bg-card border border-border p-7 sm:p-8 hover:border-primary/20 transition-all duration-500 h-full">
+                                <div className={`w-10 h-10 rounded-xl ${card.iconBg} flex items-center justify-center ${card.iconColor} mb-5`}>
+                                    {card.icon}
                                 </div>
-                                <h3 className="text-3xl sm:text-4xl font-bold mb-6 font-sans text-balance">Manage Your Entire Business <span className="text-blue-400">From Anywhere.</span></h3>
-                                <p className="text-white/60 text-base sm:text-lg max-w-lg mb-8">
-                                    Accept payments in 135+ currencies, handle international tax compliance, and scale your freelance empire globally without the paperwork.
-                                </p>
-                                <div className="flex flex-wrap gap-2 sm:gap-4">
-                                    {['USD', 'EUR', 'GBP', 'BTC', 'ETH'].map(cur => (
-                                        <div key={cur} className="px-3 py-1.5 sm:px-4 sm:py-2 bg-white/5 border border-white/10 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-mono">{cur}</div>
-                                    ))}
-                                </div>
+                                <h3 className="text-lg font-bold text-foreground mb-2 tracking-tight">{card.title}</h3>
+                                <p className="text-muted-foreground text-sm leading-relaxed">{card.desc}</p>
                             </div>
-                            <div className="relative mt-8 sm:mt-0">
-                                {/* Visual representation of global reach */}
-                                <div className="aspect-[16/10] sm:aspect-video bg-gradient-to-br from-blue-600 to-indigo-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 relative overflow-hidden">
-                                    <div className="absolute inset-0 opacity-20 pointer-events-none">
-                                        <div className="w-full h-full border border-dashed border-white/50 rounded-full animate-spin-slow"></div>
+                        </AnimateOnScroll>
+                    ))}
+
+                    {/* Full-width dark card */}
+                    <AnimateOnScroll animation="scale-in" delay="100ms" className="md:col-span-12">
+                        <div className="group relative overflow-hidden rounded-4xl sm:rounded-5xl bg-slate-900 dark:bg-[#0d1117] p-8 sm:p-12 md:p-16 text-white transition-all duration-500">
+                            <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
+                                <div>
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-6">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                                        Global scale
                                     </div>
-                                    <div className="relative z-10 flex flex-col justify-between h-full">
-                                        <div className="flex justify-between items-start">
-                                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full"></div>
-                                            <div className="px-3 h-7 sm:h-8 bg-green-400/20 text-green-400 border border-green-400/30 rounded-full flex items-center justify-center text-[10px] font-bold tracking-wider">LIVE STATUS</div>
+                                    <h3 className="text-3xl sm:text-4xl font-bold mb-5 tracking-tight leading-tight">
+                                        Manage your entire business{' '}
+                                        <span className="font-script text-blue-400 capitalize text-4xl sm:text-5xl">anywhere</span>
+                                    </h3>
+                                    <p className="text-white/50 text-sm sm:text-base max-w-lg mb-8 leading-relaxed">
+                                        Accept payments in 135+ currencies, handle international tax compliance, and scale your freelance business globally.
+                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['USD', 'EUR', 'GBP', 'XAF', 'BTC'].map(cur => (
+                                            <div key={cur} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[11px] font-mono text-white/60">{cur}</div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="relative">
+                                    <div className="aspect-[4/3] bg-gradient-to-br from-blue-600/80 to-indigo-900/80 rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/5">
+                                        <div className="relative z-10 flex flex-col justify-between h-full">
+                                            <div className="flex justify-between items-start">
+                                                <div className="w-10 h-10 bg-white/10 rounded-full" />
+                                                <div className="px-3 h-7 bg-emerald-400/15 text-emerald-400 border border-emerald-400/20 rounded-full flex items-center justify-center text-[10px] font-bold tracking-widest">LIVE</div>
+                                            </div>
+                                            <div>
+                                                <div className="text-5xl sm:text-6xl font-bold tracking-tighter mb-1">$2.4M+</div>
+                                                <div className="text-[11px] text-white/40 uppercase tracking-[0.2em] font-semibold">Volume processed</div>
+                                            </div>
                                         </div>
-                                        <div className="text-5xl sm:text-6xl font-bold tracking-tighter">$2.4M+</div>
-                                        <div className="text-[10px] sm:text-sm opacity-60 uppercase tracking-widest font-bold">Total volume processed</div>
+                                        <div className="absolute -bottom-20 -right-20 w-48 h-48 bg-blue-400/10 rounded-full blur-3xl" />
                                     </div>
-                                </div>
-                                {/* Floating elements - hidden on smallest screens */}
-                                <div className="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 bg-white dark:bg-card p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xl text-foreground text-[10px] sm:text-xs font-bold flex items-center gap-2 border border-border z-20">
-                                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></span>
-                                    New Payment Recieved
+                                    <div className="absolute -top-3 -left-3 sm:-top-5 sm:-left-5 bg-card text-foreground p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xl text-[11px] font-semibold flex items-center gap-2 border border-border z-20">
+                                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                                        New Payment Received
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </AnimateOnScroll>
                 </div>
             </div>
         </section>
     );
 }
-

@@ -1,144 +1,129 @@
+'use client';
+
+import { useState } from 'react';
+import { AnimateOnScroll, staggerDelay } from '@/hooks/useScrollAnimation';
+
 export default function Pricing() {
+    const [annual, setAnnual] = useState(false);
+
     const plans = [
         {
-            name: "Starter",
-            price: "$19",
-            period: "/month",
-            description: "Perfect for individual freelancers starting out",
-            features: [
-                "Up to 5 active projects",
-                "Real-time commit tracking",
-                "Basic analytics dashboard",
-                "Contract management",
-                "Email support",
-                "2 GB file storage"
-            ],
-            popular: false
+            name: 'Starter',
+            monthly: 'Free',
+            annually: 'Free',
+            period: '/forever',
+            description: 'Perfect for new freelancers.',
+            features: ['3 Active Clients', 'Basic Invoicing', '1 Contract Template', 'Community Support'],
+            cta: 'Get Started',
+            accent: false
         },
         {
-            name: "Professional",
-            price: "$49",
-            period: "/month",
-            description: "Best for established freelancers and small agencies",
-            features: [
-                "Unlimited projects",
-                "AI-powered meetings (10 hours/month)",
-                "Advanced analytics & insights",
-                "Priority email & chat support",
-                "Document credibility analysis",
-                "50 GB file storage",
-                "Custom branding",
-                "API access"
-            ],
-            popular: true
+            name: 'Professional',
+            monthly: '$29',
+            annually: '$24',
+            period: '/month',
+            description: 'For full-time freelancers growing fast.',
+            features: ['Unlimited Clients', 'Advanced Invoicing', 'Custom Contracts', 'Client Portal Access', 'Priority Support'],
+            cta: 'Start Free Trial',
+            accent: true
         },
         {
-            name: "Enterprise",
-            price: "Custom",
-            period: "",
-            description: "For agencies and teams managing multiple clients",
-            features: [
-                "Everything in Professional",
-                "Unlimited AI meeting hours",
-                "On-premise deployment option"
-            ],
-            popular: false
+            name: 'Agency',
+            monthly: '$99',
+            annually: '$79',
+            period: '/month',
+            description: 'For teams managing multiple freelancers.',
+            features: ['Everything in Pro', 'Team Members', 'White Labeling', 'API Access', 'Dedicated Account Manager'],
+            cta: 'Contact Sales',
+            accent: false
         }
     ];
 
     return (
-        <section id="pricing" className="py-20 sm:py-24 bg-background transition-colors duration-300">
+        <section id="pricing" className="py-24 sm:py-32 bg-secondary/20 dark:bg-white/[0.02] transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
-                <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-                    <h2 className="text-xs sm:text-sm font-bold text-primary tracking-widest uppercase mb-3">Pricing Plans</h2>
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-6 font-sans text-balance">
-                        Start Small, <span className="text-primary">Scale Big</span>
-                    </h3>
-                    <p className="text-muted-foreground text-lg sm:text-xl max-w-2xl mx-auto">
-                        Transparent pricing for every stage of your freelance journey. No hidden fees.
+
+                {/* Header — RIGHT aligned (4th section) */}
+                <AnimateOnScroll animation="fade-left" className="max-w-2xl mb-12 sm:mb-16 ml-auto text-right">
+                    <p className="text-xs font-bold text-primary tracking-[0.25em] uppercase mb-4">Pricing</p>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight tracking-tight mb-6">
+                        Start small,{' '}
+                        <span className="font-script text-primary capitalize text-4xl sm:text-5xl md:text-6xl">scale</span>{' '}
+                        big
+                    </h2>
+                    <p className="text-muted-foreground text-base sm:text-lg ml-auto max-w-lg">
+                        Transparent pricing for every stage. No hidden fees, cancel anytime.
                     </p>
-                </div>
+                </AnimateOnScroll>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+                {/* Billing toggle */}
+                <AnimateOnScroll animation="fade-up" delay="100ms" className="flex items-center justify-end gap-4 mb-12">
+                    <span className={`text-sm font-semibold transition-colors ${!annual ? 'text-foreground' : 'text-muted-foreground'}`}>Monthly</span>
+                    <button
+                        onClick={() => setAnnual(!annual)}
+                        className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${annual ? 'bg-primary' : 'bg-border'}`}
+                    >
+                        <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-300 ${annual ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                    </button>
+                    <span className={`text-sm font-semibold transition-colors ${annual ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        Annual
+                        <span className="ml-1.5 text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">Save 20%</span>
+                    </span>
+                </AnimateOnScroll>
 
-                    {/* Starter Plan */}
-                    <div className="bg-card border border-border rounded-[2rem] p-8 sm:p-10 flex flex-col hover:border-primary/30 transition-all duration-300">
-                        <div className="mb-8">
-                            <span className="bg-secondary text-secondary-foreground text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Starter</span>
-                            <div className="mt-6 flex items-baseline">
-                                <span className="text-4xl sm:text-5xl font-bold text-foreground font-sans">Free</span>
-                                <span className="ml-2 text-muted-foreground text-sm">/forever</span>
+                {/* Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl ml-auto">
+                    {plans.map((plan, index) => (
+                        <AnimateOnScroll key={index} animation="fade-up" delay={staggerDelay(index, 120)}>
+                            <div
+                                className={`relative rounded-3xl p-7 sm:p-8 flex flex-col transition-all duration-500 h-full hover:-translate-y-1
+                                    ${plan.accent
+                                        ? 'bg-card border-2 border-primary shadow-xl shadow-primary/10 md:-translate-y-3 md:hover:-translate-y-4'
+                                        : 'bg-card border border-border hover:border-primary/20'
+                                    }`}
+                            >
+                                {plan.accent && (
+                                    <div className="absolute -top-3 left-6 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                                        Popular
+                                    </div>
+                                )}
+
+                                <div className="mb-6">
+                                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{plan.name}</span>
+                                    <div className="mt-3 flex items-baseline gap-1">
+                                        <span className="text-4xl sm:text-5xl font-bold text-foreground tracking-tight transition-all duration-300">
+                                            {annual ? plan.annually : plan.monthly}
+                                        </span>
+                                        <span className="text-muted-foreground text-sm">{plan.period}</span>
+                                    </div>
+                                    <p className="mt-3 text-muted-foreground text-sm">{plan.description}</p>
+                                </div>
+
+                                <ul className="space-y-3 mb-8 flex-1">
+                                    {plan.features.map((feature) => (
+                                        <li key={feature} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                                            <svg className="w-4 h-4 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                <button
+                                    className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-300
+                                        ${plan.accent
+                                            ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30'
+                                            : 'border border-border text-foreground hover:bg-secondary hover:border-primary/20'
+                                        }`}
+                                >
+                                    {plan.cta}
+                                </button>
                             </div>
-                            <p className="mt-4 text-muted-foreground text-sm sm:text-base font-medium">Perfect for new freelancers just getting started.</p>
-                        </div>
-                        <ul className="space-y-4 mb-10 flex-1">
-                            {['3 Active Clients', 'Basic Invoicing', '1 Contract Template', 'Community Support'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-muted-foreground text-sm">
-                                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-                        <button className="w-full py-3.5 sm:py-4 rounded-xl border border-input text-foreground text-sm sm:text-base font-bold hover:bg-secondary transition-colors">
-                            Get Started
-                        </button>
-                    </div>
-
-                    {/* Professional Plan */}
-                    <div className="bg-primary rounded-[2rem] p-8 sm:p-10 flex flex-col relative overflow-hidden transform md:-translate-y-4 shadow-2xl shadow-primary/20">
-                        <div className="absolute top-0 right-0 p-4">
-                            <div className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Popular</div>
-                        </div>
-                        <div className="mb-8 relative z-10 text-white">
-                            <span className="bg-white/20 text-white text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Professional</span>
-                            <div className="mt-6 flex items-baseline">
-                                <span className="text-4xl sm:text-5xl font-bold font-sans">$29</span>
-                                <span className="ml-2 text-sm opacity-80">/month</span>
-                            </div>
-                            <p className="mt-4 opacity-90 text-sm sm:text-base font-medium">For full-time freelancers growing their business.</p>
-                        </div>
-                        <ul className="space-y-4 mb-10 flex-1 relative z-10">
-                            {['Unlimited Clients', 'Advanced Invoicing', 'Custom Contracts', 'Client Portal Access', 'Priority Support'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-white text-sm">
-                                    <svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-                        <button className="w-full py-3.5 sm:py-4 rounded-xl bg-white text-primary text-sm sm:text-base font-bold hover:bg-gray-50 transition-colors relative z-10 shadow-lg">
-                            Start Free Trial
-                        </button>
-
-                        {/* Background Decoration */}
-                        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                        <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-                    </div>
-
-                    {/* Agency Plan */}
-                    <div className="bg-card border border-border rounded-[2rem] p-8 sm:p-10 flex flex-col hover:border-primary/30 transition-all duration-300">
-                        <div className="mb-8">
-                            <span className="bg-secondary text-secondary-foreground text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Agency</span>
-                            <div className="mt-6 flex items-baseline">
-                                <span className="text-4xl sm:text-5xl font-bold text-foreground font-sans">$99</span>
-                                <span className="ml-2 text-muted-foreground text-sm">/month</span>
-                            </div>
-                            <p className="mt-4 text-muted-foreground text-sm sm:text-base font-medium">For teams and agencies managing multiple freelancers.</p>
-                        </div>
-                        <ul className="space-y-4 mb-10 flex-1">
-                            {['Everything in Pro', 'Team Members', 'White Labeling', 'API Access', 'Dedicated Account Manager'].map((feature) => (
-                                <li key={feature} className="flex items-center gap-3 text-muted-foreground text-sm">
-                                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-                        <button className="w-full py-3.5 sm:py-4 rounded-xl border border-input text-foreground text-sm sm:text-base font-bold hover:bg-secondary transition-colors">
-                            Contact Sales
-                        </button>
-                    </div>
-
+                        </AnimateOnScroll>
+                    ))}
                 </div>
             </div>
-        </section >
+        </section>
     );
 }

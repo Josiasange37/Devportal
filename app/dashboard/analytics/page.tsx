@@ -1,10 +1,11 @@
 'use client';
 
 import { TrendingUp, BarChart3, PieChart, Activity, ArrowUpRight, ArrowDownRight, Zap } from 'lucide-react';
+import DashboardPage from '@/components/DashboardPage';
 
 export default function AnalyticsPage() {
     return (
-        <div className="animate-in fade-in duration-1000">
+        <DashboardPage>
             {/* Page Title Section */}
             <div className="mb-6 lg:mb-10">
                 <div className="flex items-center gap-3 mb-2">
@@ -81,6 +82,6 @@ export default function AnalyticsPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </DashboardPage>
     );
 }

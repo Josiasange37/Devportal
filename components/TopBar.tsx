@@ -33,7 +33,7 @@ export default function TopBar() {
     }, []);
 
     return (
-        <header className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled ? 'bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-white/5 py-2 lg:py-3' : 'bg-transparent py-4 lg:py-5'}`}>
+        <header className="sticky top-0 z-40 w-full bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-white/5 py-2 lg:py-3 transition-all duration-300">
             <div className="px-4 sm:px-8 flex items-center justify-between gap-3 sm:gap-8">
                 {/* Search Bar */}
                 <div className="flex-1 max-w-full sm:max-w-xl">

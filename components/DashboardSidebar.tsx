@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Logo from './Logo';
 import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
 
 export default function DashboardSidebar() {
     const pathname = usePathname();
@@ -103,6 +104,37 @@ export default function DashboardSidebar() {
                         );
                     })}
                 </nav>
+
+                {/* Mascot Companion Section */}
+                <div className="px-4 py-4 mt-auto">
+                    <div className="relative group bg-[#1A1A24]/40 border border-white/5 rounded-2xl p-4 transition-all hover:bg-[#1A1A24]/80 hover:border-primary/20">
+                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none mb-2">
+                            <div className="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-2xl border border-primary/20 relative">
+                                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-200 leading-tight text-center">
+                                    Need help with your mission, {user?.displayName?.split(' ')[0] || 'Agent'}?
+                                </p>
+                                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white dark:bg-slate-800 border-r border-b border-primary/20 rotate-45"></div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <div className="relative w-12 h-12 flex-shrink-0 animate-float">
+                                <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse"></div>
+                                <Image
+                                    src="/mascot.png"
+                                    alt="Gravity"
+                                    width={48}
+                                    height={48}
+                                    className="w-full h-full object-contain relative z-10"
+                                />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-0.5">Gravity AI</p>
+                                <p className="text-[9px] text-[#94A3B8] font-bold uppercase truncate">Systems Online</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 {/* User Profile Footer */}
                 <div className="h-[72px] px-4 border-t border-white/5 flex items-center gap-3 hover:bg-white/5 transition-colors cursor-pointer group">

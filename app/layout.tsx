@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Great_Vibes, Manrope } from "next/font/google";
+import { Plus_Jakarta_Sans, Great_Vibes, Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import StructuredData from "@/components/StructuredData";
 
-const inter = Inter({ subsets: ["latin"] });
+const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
 const greatVibes = Great_Vibes({ weight: "400", subsets: ["latin"], variable: "--font-script" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-heading" });
 
@@ -87,10 +87,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} ${greatVibes.variable} ${manrope.variable}`}>
+      <body className={`${plusJakarta.variable} ${greatVibes.variable} ${manrope.variable} font-sans`}>
         <StructuredData nonce={nonce} />
         <AuthProvider>
-          <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem>
+          <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
         </AuthProvider>

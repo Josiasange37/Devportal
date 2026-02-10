@@ -5,13 +5,14 @@ import ProjectList from '@/components/ProjectList';
 import { Bell, Activity, Search } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useAuth } from '@/contexts/AuthContext';
+import DashboardPage from '@/components/DashboardPage';
 
 export default function DashboardOverviewPage() {
     const { user } = useAuth();
     const displayName = user?.displayName || user?.email?.split('@')[0] || 'Member';
 
     return (
-        <div className="animate-in fade-in duration-1000">
+        <DashboardPage>
             {/* Welcome Section */}
             <div className="mb-6 lg:mb-10">
                 <div className="flex items-center gap-3 mb-2">
@@ -89,6 +90,6 @@ export default function DashboardOverviewPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </DashboardPage>
     );
 }

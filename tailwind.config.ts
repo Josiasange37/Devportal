@@ -9,6 +9,16 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+                heading: ['var(--font-heading)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+                script: ['var(--font-script)', 'cursive'],
+            },
+            borderRadius: {
+                '4xl': '2rem',
+                '5xl': '2.5rem',
+                '6xl': '3rem',
+            },
             colors: {
                 border: "rgb(var(--border))",
                 input: "rgb(var(--input))",
