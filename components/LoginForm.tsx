@@ -4,6 +4,19 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
+const InputField = ({ label, type, value, onChange, placeholder, required = true }: any) => (
+    <div className="space-y-1.5">
+        <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider ml-1">{label}</label>
+        <input
+            type={type}
+            required={required}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            className="w-full h-12 px-4 rounded-xl bg-secondary/30 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-foreground placeholder:text-muted-foreground/50 outline-none"
+        />
+    </div>
+);
 export default function LoginForm({
     onStepChange,
     onModeToggle,
@@ -139,19 +152,7 @@ export default function LoginForm({
         onStepChange(1, formData.name);
     };
 
-    const InputField = ({ label, type, value, onChange, placeholder, required = true }: any) => (
-        <div className="space-y-1.5">
-            <label className="text-xs font-bold text-foreground/80 uppercase tracking-wider ml-1">{label}</label>
-            <input
-                type={type}
-                required={required}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                className="w-full h-12 px-4 rounded-xl bg-secondary/30 border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-medium text-foreground placeholder:text-muted-foreground/50 outline-none"
-            />
-        </div>
-    );
+
 
     return (
         <div className="w-full relative">
