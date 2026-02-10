@@ -8,10 +8,12 @@ export function middleware(request: NextRequest) {
     // We use a nonce for scripts to be more secure.
     const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://apis.google.com https://www.gstatic.com;
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://i.pravatar.cc;
+    img-src 'self' blob: data: https://i.pravatar.cc https://lh3.googleusercontent.com https://avatars.githubusercontent.com;
     font-src 'self' https://fonts.gstatic.com;
+    connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.firebase.com https://vitals.vercel-insights.com;
+    frame-src 'self' https://*.firebaseapp.com https://*.firebase.com;
     object-src 'none';
     base-uri 'self';
     form-action 'self';

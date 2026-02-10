@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function StructuredData() {
+export default function StructuredData({ nonce }: { nonce?: string }) {
     const organizationData = {
         "@context": "https://schema.org",
         "@type": "Organization",
@@ -35,10 +35,12 @@ export default function StructuredData() {
         <>
             <script
                 type="application/ld+json"
+                nonce={nonce}
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
             />
             <script
                 type="application/ld+json"
+                nonce={nonce}
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareData) }}
             />
         </>

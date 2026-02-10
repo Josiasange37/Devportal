@@ -76,15 +76,19 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-export default function RootLayout({
+import { headers } from 'next/headers';
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get('x-nonce') || '';
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} ${greatVibes.variable} ${manrope.variable}`}>
-        <StructuredData />
+        <StructuredData nonce={nonce} />
         <AuthProvider>
           <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem>
             {children}
